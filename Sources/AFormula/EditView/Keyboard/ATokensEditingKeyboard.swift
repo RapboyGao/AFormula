@@ -32,7 +32,7 @@ private struct Example: View {
 
     var body: some View {
         ATokensEditingKeyboard($status)
-            .frame(height: 300)
+            .frame(height: 220)
     }
 }
 

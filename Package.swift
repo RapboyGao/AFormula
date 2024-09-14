@@ -13,6 +13,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/RapboyGao/AValue.git", branch: "main"),
+        .package(url: "https://github.com/RapboyGao/AFunction.git", branch: "main"),
         .package(url: "https://github.com/RapboyGao/AUnit.git", branch: "main"),
     ],
     targets: [
@@ -22,6 +23,7 @@ let package = Package(
             name: "AFormula",
             dependencies: [
                 .product(name: "AValue", package: "AValue"),
+                .product(name: "AFunction", package: "AFunction"),
                 .product(name: "AUnit", package: "AUnit"),
             ]),
         .testTarget(
