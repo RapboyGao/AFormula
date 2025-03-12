@@ -2,16 +2,16 @@ import AFunction
 import AValue
 import Foundation
 
-struct AFormulaEvaluator: Sendable {
-    var rowValues: [Int: AValue]
-    var functions: [Int: @Sendable ([AValue]) throws -> AValue]
+public struct AFormulaEvaluator: Sendable {
+    public var rowValues: [Int: AValue]
+    public var functions: [Int: @Sendable ([AValue]) throws -> AValue]
 
-    init(rowValues: [Int: AValue], _ functions: [Int: @Sendable ([AValue]) throws -> AValue] = AFunction.functionInstances) {
+    public init(rowValues: [Int: AValue], _ functions: [Int: @Sendable ([AValue]) throws -> AValue] = AFunction.functionInstances) {
         self.rowValues = rowValues
         self.functions = functions
     }
 
-    @Sendable func evaluate(formula: AFormula) throws -> AValue {
+    @Sendable public func evaluate(formula: AFormula) throws -> AValue {
         switch formula {
         case .value(let value):
             return value
