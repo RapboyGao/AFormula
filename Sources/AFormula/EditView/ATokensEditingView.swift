@@ -53,7 +53,11 @@ private struct Example: View {
     @State private var status: ATokenEditStatus = .init(formula: .p(30 - 4.5) / 50)
 
     var body: some View {
-        ATokensEditingView($status)
+        VStack {
+            ATokensEditingView($status)
+            ATokensEditingKeyboard($status)
+                .frame(height: 250)
+        }
     }
 }
 
