@@ -6,10 +6,10 @@ public struct AToken: Identifiable, Hashable, Sendable, Codable, CustomStringCon
     public var level: Int
     public var content: Content
 
-    public init(_ content: Content) {
+    public init(_ content: Content, level: Int = 0) {
         self.id = .random(in: .min ... .max)
         self.content = content
-        self.level = 0
+        self.level = level
     }
 
     public var description: String {

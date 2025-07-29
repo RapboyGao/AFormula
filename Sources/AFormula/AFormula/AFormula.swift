@@ -230,7 +230,7 @@ public enum AFormula: Codable, Sendable, Hashable, ExpressibleByFloatLiteral,
             tokens.append(AToken(.colon))
             addTokens(for: falseFormula)
         }
-
+        tokens.normalize(startingFrom: 0)
         return tokens
     }
 

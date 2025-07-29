@@ -10,18 +10,17 @@ public struct ATokenMenu: View {
     var cursorToLeft: () -> Void
     var cursorToRight: () -> Void
 
+    private var tokenString: String {
+        token.toString(rows: editingHelper.rowDict, functions: editingHelper.functionNameDict)
+    }
+
     public var body: some View {
         Menu {
-            Text(
-                token.toString(
-                    rows: editingHelper.rowDict, functions: editingHelper.functionNameDict))
+            Text(tokenString)
             Button("Delete", systemImage: "trash", role: .destructive, action: handleDelete)
         } label: {
-            Text(
-                token.toString(
-                    rows: editingHelper.rowDict, functions: editingHelper.functionNameDict)
-            )
-            .foregroundStyle(token.colorForLightTheme())
+            Text(tokenString)
+                .foregroundStyle(token.colorForLightTheme())
         }
     }
 

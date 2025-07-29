@@ -47,8 +47,8 @@ public struct ATokenEditStatus: Hashable, Sendable, Codable {
     mutating func delete(_ someToken: AToken) {
         trySubmitNumberInput()
 
-        var beforeCursor = [AToken]()  // 用于存储光标之前的token
-        var afterCursor = [AToken]()  // 用于存储光标之后的token
+        var beforeCursor = [AToken]() // 用于存储光标之前的token
+        var afterCursor = [AToken]() // 用于存储光标之后的token
         var found = false
         let idToCompare = someToken.id
 
@@ -71,8 +71,8 @@ public struct ATokenEditStatus: Hashable, Sendable, Codable {
     private mutating func setCursor(to someToken: AToken, placeCursorAfter: Bool) {
         trySubmitNumberInput()
 
-        var beforeCursor = [AToken]()  // 用于存储光标之前的token
-        var afterCursor = [AToken]()  // 用于存储光标之后的token
+        var beforeCursor = [AToken]() // 用于存储光标之前的token
+        var afterCursor = [AToken]() // 用于存储光标之后的token
         var found = false
         let idToCompare = someToken.id
 

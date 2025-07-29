@@ -37,11 +37,9 @@ public extension AToken {
 
     func colorForLightTheme() -> Color {
         switch content {
-        case .leftParenthesis, .rightParenthesis, .comma:
+        case .leftParenthesis, .rightParenthesis, .comma, .functionWithLeftParenthesis:
             let colors = lightThemeColorsForParentheses()
             return colors[level % colors.count]
-        case .functionWithLeftParenthesis:
-            return Color(red: 0.898, green: 0.212, blue: 0.212) // Red 600
         case .value(let value):
             return value.type.colorForLightTheme()
         case .plus, .minus, .asterisk, .divide, .remainder, .power,
