@@ -22,7 +22,13 @@ public struct AFormulaEditingHelper: Sendable, EnvironmentKey {
         }
     }
 
-    public static let defaultValue: AFormulaEditingHelper = .init(sections: [], functions: [])
+    public static let defaultValue: AFormulaEditingHelper = {
+        let row1 = ARowAbstract(id: 1, name: "A", global: "A", type: .number)
+        let sections = [
+            ASectionAbstract(id: 12, name: "Section1", rows: [row1])
+        ]
+        return AFormulaEditingHelper(sections: sections, functions: AFunction.allCases)
+    }()
 }
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)

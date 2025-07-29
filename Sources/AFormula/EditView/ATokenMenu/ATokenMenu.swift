@@ -4,6 +4,7 @@ import SwiftUI
 @available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
 public struct ATokenMenu: View {
     @Binding var token: AToken
+    @Environment(\.aFormulaEditingHelper) private var editingHelper
 
     var handleDelete: () -> Void
     var cursorToLeft: () -> Void
@@ -11,18 +12,43 @@ public struct ATokenMenu: View {
 
     public var body: some View {
         Menu {
-            Text(token.toString(rows: [:], functions: [:]))
+            Text(
+                token.toString(
+                    rows: editingHelper.rowDict, functions: editingHelper.functionNameDict))
             Button("Delete", systemImage: "trash", role: .destructive, action: handleDelete)
         } label: {
-            Text(token.toString(rows: [:], functions: [:]))
-                .foregroundStyle(token.colorForLightTheme())
+            Text(
+                token.toString(
+                    rows: editingHelper.rowDict, functions: editingHelper.functionNameDict)
+            )
+            .foregroundStyle(token.colorForLightTheme())
         }
     }
 
-    public init(_ token: Binding<AToken>, handleDelete: @escaping () -> Void, cursorToLeft: @escaping () -> Void, cursorToRight: @escaping () -> Void) {
+    public init(
+        _ token: Binding<AToken>, handleDelete: @escaping () -> Void,
+        cursorToLeft: @escaping () -> Void, cursorToRight: @escaping () -> Void
+    ) {
         self._token = token
         self.handleDelete = handleDelete
         self.cursorToLeft = cursorToLeft
         self.cursorToRight = cursorToRight
     }
+}
+
+@available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
+private struct ATokenMenuPreview: View {
+    @State private var token = AToken(.row(id: 1))
+
+    var body: some View {
+        ATokenMenu(
+            $token, handleDelete: {}, cursorToLeft: {}, cursorToRight: {}
+        )
+        .environment(\.aFormulaEditingHelper, AFormulaEditingHelper.defaultValue)
+    }
+}
+
+@available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
+#Preview {
+    ATokenMenuPreview()
 }
