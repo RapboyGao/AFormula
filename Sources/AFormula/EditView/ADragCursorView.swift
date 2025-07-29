@@ -4,7 +4,7 @@ import SwiftUI
 
     @available(iOS 16, *)
     public struct ADragCursorView: View {
-        var interval: CGFloat = 10
+        var interval: CGFloat
         @Binding var status: ATokenEditStatus
 
         @State private var touchPosition = CGPoint()
@@ -31,22 +31,17 @@ import SwiftUI
                 }
         }
 
-        private var color: Color {
-            status.isDraggingCursor ? .blue : .gray
-        }
-
         public var body: some View {
-            GeometryReader { geometry in
+            GeometryReader { _ in
                 ZStack {
-                    RoundedRectangle(cornerRadius: 5)
-                        .fill(color)
-                        .frame(width: geometry.size.width, height: 30)
+                    RoundedRectangle(cornerRadius: 8)
                 }
                 .simultaneousGesture(dragGesture)
             }
+            .frame(height: 30)
         }
 
-        public init(status: Binding<ATokenEditStatus>, interval: CGFloat = 10) {
+        public init(status: Binding<ATokenEditStatus>, interval: CGFloat = 15) {
             self._status = status
             self.interval = interval
         }
