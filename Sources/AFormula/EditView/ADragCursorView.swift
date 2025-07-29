@@ -6,6 +6,7 @@ import SwiftUI
     public struct ADragCursorView: View {
         var interval: CGFloat
         @Binding var status: ATokenEditStatus
+
         @State private var geometryWidth: CGFloat = 0
         @State private var touchPosition = CGPoint()
         @State private var previousPosition = CGPoint()
@@ -27,9 +28,10 @@ import SwiftUI
                 gradient: Gradient(colors: [
                     Color.white.opacity(0.9),
                     color.opacity(0.8),
-                    color.opacity(0.5)
+                    color.opacity(0.5),
                 ]),
-                center: .init(x: touchPosition.x / geometryWidth, y: 0.5),
+                center: status.isDraggingCursor
+                    ? .init(x: touchPosition.x / geometryWidth, y: 0.5) : .init(x: 0.5, y: 0.5), // 默认状态下居中
                 startRadius: 8,
                 endRadius: 40
             )
@@ -60,7 +62,12 @@ import SwiftUI
             GeometryReader { geometry in
                 ZStack {
                     RoundedRectangle(cornerRadius: 10)
-                        .fill(LinearGradient(gradient: Gradient(colors: [color.opacity(0.6), color.opacity(0.9)]), startPoint: .top, endPoint: .bottom))
+                        .fill(
+                            LinearGradient(
+                                gradient: Gradient(colors: [color.opacity(0.6), color.opacity(0.9)]
+                                ), startPoint: .top, endPoint: .bottom
+                            )
+                        )
                         .overlay(
                             RoundedRectangle(cornerRadius: 10)
                                 .stroke(Color.white.opacity(0.3), lineWidth: 1)
@@ -70,11 +77,13 @@ import SwiftUI
                                 .fill(touchPositionGradient)
                         )
                         .frame(width: geometry.size.width, height: 32)
-                        .shadow(color: status.isDraggingCursor ? color.opacity(0.4) : .black.opacity(0.15),
-                                radius: status.isDraggingCursor ? 8 : 4,
-                                x: 0,
-                                y: status.isDraggingCursor ? 4 : 2)
-                        .scaleEffect(status.isDraggingCursor ? 1.05 : 1.0)
+                        .shadow(
+                            color: status.isDraggingCursor
+                                ? color.opacity(0.4) : .black.opacity(0.15),
+                            radius: status.isDraggingCursor ? 8 : 4,
+                            x: 0,
+                            y: status.isDraggingCursor ? 4 : 2
+                        )
                         .animation(.easeInOut(duration: 0.2), value: status.isDraggingCursor)
                         .onAppear { geometryWidth = geometry.size.width }
                         .onChange(of: geometry.size.width) { geometryWidth = $0 }

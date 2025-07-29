@@ -3,7 +3,7 @@ import AViewUI
 #if os(iOS)
 
 @available(iOS 16, *)
-public struct ATokenEditView: View {
+public struct ATokensEditView: View {
     @Binding var status: ATokenEditStatus
     @FocusState private var focused: Bool
     @State private var dragPosition = CGPoint()
@@ -23,12 +23,13 @@ public struct ATokenEditView: View {
             Group {
                 if status.isDraggingCursor {
                     AInputCursorNonAlternating()
+
                 } else {
                     TextField("", text: .constant(""))
                         .focused($focused)
                 }
             }
-            .frame(width: 5)
+            .frame(width: 3)
 
             ForEach($status.tokensAfterCursor) { bindToken in
                 ATokenMenu(bindToken) {
@@ -39,6 +40,9 @@ public struct ATokenEditView: View {
                     status.setCursor(toAfter: bindToken.wrappedValue)
                 }
             }
+        }
+        .onChange(of: status.isDraggingCursor) { _ in
+            focused = true
         }
         .onChange(of: focused) { _ in
             focused = true
@@ -55,7 +59,7 @@ private struct ATokenEditPreview: View {
 
     var body: some View {
         VStack {
-            ATokenEditView(status: $status)
+            ATokensEditView(status: $status)
             ADragCursorView(status: $status)
                 .padding(3)
         }
