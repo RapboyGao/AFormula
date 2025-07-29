@@ -1,14 +1,18 @@
 import Foundation
 
 public struct ATokenEditStatus: Hashable, Sendable, Codable {
-    public var tokensBeforeCursor: [AToken] // 光标前的token数组
-    public var tokensAfterCursor: [AToken] // 光标后的token数组
+    /// 光标前的token数组
+    public var tokensBeforeCursor: [AToken]
+    /// 光标后的token数组
+    public var tokensAfterCursor: [AToken]
+    /// 数字输入字符串
     public var numberInputString: String
+    /// 是否正在拖动光标
+    public var isDraggingCursor = false
 
     var canInsertNumber: Bool {
-        return tokensBeforeCursor.last?.content.canBeFollowedByLiteral() ??
-            tokensAfterCursor.first?.content.canBePrefixedByLiteral() ??
-            true
+        return tokensBeforeCursor.last?.content.canBeFollowedByLiteral() ?? tokensAfterCursor.first?
+            .content.canBePrefixedByLiteral() ?? true
     }
 
     var canInsertOtherLiterals: Bool {
@@ -43,8 +47,8 @@ public struct ATokenEditStatus: Hashable, Sendable, Codable {
     mutating func delete(_ someToken: AToken) {
         trySubmitNumberInput()
 
-        var beforeCursor = [AToken]() // 用于存储光标之前的token
-        var afterCursor = [AToken]() // 用于存储光标之后的token
+        var beforeCursor = [AToken]()  // 用于存储光标之前的token
+        var afterCursor = [AToken]()  // 用于存储光标之后的token
         var found = false
         let idToCompare = someToken.id
 
@@ -67,8 +71,8 @@ public struct ATokenEditStatus: Hashable, Sendable, Codable {
     private mutating func setCursor(to someToken: AToken, placeCursorAfter: Bool) {
         trySubmitNumberInput()
 
-        var beforeCursor = [AToken]() // 用于存储光标之前的token
-        var afterCursor = [AToken]() // 用于存储光标之后的token
+        var beforeCursor = [AToken]()  // 用于存储光标之前的token
+        var afterCursor = [AToken]()  // 用于存储光标之后的token
         var found = false
         let idToCompare = someToken.id
 
