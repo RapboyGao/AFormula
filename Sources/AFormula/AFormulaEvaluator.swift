@@ -2,6 +2,18 @@ import AFunction
 import AValue
 import Foundation
 
+public enum AFormulaEvaluatorError: Error, Sendable, Codable {
+    case invalidOperation // 无效操作
+    case divisionByZero // 除零错误
+    case comparisonError // 比较错误
+    case rowNotFound(id: Int) // 行未找到错误，包含未找到的行ID
+    case functionNotFound(id: Int) // 函数未找到错误，包含未找到的函数ID
+    case indexOutOfBounds // 索引越界错误
+    case typeMismatch(expected: AValueType, actual: AValueType) // 类型不匹配错误，包含期望类型和实际类型
+    case invalidToken
+}
+
+
 public struct AFormulaEvaluator: Sendable {
     public var rowValues: [Int: AValue]
     public var functions: [Int: @Sendable ([AValue]) throws -> AValue]
@@ -17,12 +29,12 @@ public struct AFormulaEvaluator: Sendable {
             return value
         case .variable(let id):
             guard let value = rowValues[id] else {
-                throw AError.rowNotFound(id: id)
+                throw AFormulaEvaluatorError.rowNotFound(id: id)
             }
             return value
         case .function(let id, let args):
             guard let function = functions[id] else {
-                throw AError.functionNotFound(id: id)
+                throw AFormulaEvaluatorError.functionNotFound(id: id)
             }
             let evaluatedArgs = try args.map { try evaluate(formula: $0) }
             return try function(evaluatedArgs)
@@ -92,7 +104,7 @@ public struct AFormulaEvaluator: Sendable {
         case .ternary(let condition, let trueFormula, let falseFormula):
             let conditionValue = try evaluate(formula: condition)
             guard case .boolean(let conditionResult) = conditionValue else {
-                throw AError.typeMismatch(expected: .boolean, actual: conditionValue.type)
+                throw AFormulaEvaluatorError.typeMismatch(expected: .boolean, actual: conditionValue.type)
             }
             return try evaluate(formula: conditionResult ? trueFormula : falseFormula)
         }

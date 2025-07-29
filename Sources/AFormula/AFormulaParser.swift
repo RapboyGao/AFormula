@@ -1,7 +1,7 @@
 import Foundation
 
 /// 表示公式解析器错误类型的枚举
-enum AFormulaParserError: Error {
+public enum AFormulaParserError: Error {
     case unexpectedToken // 意外的标记
     case mismatchedParenthesis // 括号不匹配
     case invalidExpression // 无效表达式
@@ -12,7 +12,7 @@ enum AFormulaParserError: Error {
 }
 
 /// 解析公式的结构体
-struct AFormulaParser: Sendable, Hashable, Codable {
+public struct AFormulaParser: Sendable, Hashable, Codable {
     private var tokens: [AToken]
     private var index: Int = 0
 
