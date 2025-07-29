@@ -8,17 +8,17 @@ public struct ATokenEditView: View {
     @FocusState private var focused: Bool
     @State private var dragPosition = CGPoint()
 
-    private var textfieldDrag: some Gesture {
-        DragGesture()
-            .onChanged { dragger in
-                status.isDraggingCursor = true
-                dragPosition = .init(x: dragger.translation.width, y: dragger.translation.height)
-            }
-            .onEnded { _ in
-                dragPosition = .zero
-                status.isDraggingCursor = false
-            }
-    }
+//    private var textfieldDrag: some Gesture {
+//        DragGesture()
+//            .onChanged { dragger in
+//                status.isDraggingCursor = true
+//                dragPosition = .init(x: dragger.translation.width, y: dragger.translation.height)
+//            }
+//            .onEnded { _ in
+//                dragPosition = .zero
+//                status.isDraggingCursor = false
+//            }
+//    }
 
     public var body: some View {
         AWrappingStack {
@@ -34,15 +34,13 @@ public struct ATokenEditView: View {
 
             Group {
                 if status.isDraggingCursor {
-                    AInputCursorView()
+                    AInputCursorNonAlternating()
                 } else {
                     TextField("", text: .constant(""))
                         .focused($focused)
-                        .frame(width: 2)
                 }
             }
-            .simultaneousGesture(textfieldDrag)
-            .offset(x: dragPosition.x, y: dragPosition.y)
+            .frame(width: 5)
 
             ForEach($status.tokensAfterCursor) { bindToken in
                 ATokenMenu(bindToken) {
@@ -68,7 +66,11 @@ private struct ATokenEditPreview: View {
     @State private var status = ATokenEditStatus(formula: AFormula.example)
 
     var body: some View {
-        ATokenEditView(status: $status)
+        VStack {
+            ATokenEditView(status: $status)
+            ADragCursorView(status: $status)
+                .padding(3)
+        }
     }
 }
 
