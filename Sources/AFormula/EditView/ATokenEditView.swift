@@ -8,18 +8,6 @@ public struct ATokenEditView: View {
     @FocusState private var focused: Bool
     @State private var dragPosition = CGPoint()
 
-//    private var textfieldDrag: some Gesture {
-//        DragGesture()
-//            .onChanged { dragger in
-//                status.isDraggingCursor = true
-//                dragPosition = .init(x: dragger.translation.width, y: dragger.translation.height)
-//            }
-//            .onEnded { _ in
-//                dragPosition = .zero
-//                status.isDraggingCursor = false
-//            }
-//    }
-
     public var body: some View {
         AWrappingStack {
             ForEach($status.tokensBeforeCursor) { bindToken in
