@@ -18,7 +18,9 @@ public struct AToken: Identifiable, Hashable, Sendable, Codable, CustomStringCon
         content.description
     }
 
-    func toString(rows rowNamesDict: [Int: String], functions functionNamesDict: [Int: String]) -> String {
+    func toString(rows rowNamesDict: [Int: String], functions functionNamesDict: [Int: String])
+        -> String
+    {
         content.toString(rows: rowNamesDict, functions: functionNamesDict)
     }
 }
@@ -117,7 +119,8 @@ public extension AToken.Content {
             return false
         case .plus, .minus, .asterisk, .divide, .remainder, .power:
             return true
-        case .greaterThan, .lessThan, .greaterThanOrEqual, .lessThanOrEqual, .equal, .and, .or, .not, .absolute, .questionMark, .colon:
+        case .greaterThan, .lessThan, .greaterThanOrEqual, .lessThanOrEqual, .equal, .and, .or,
+             .not, .absolute, .questionMark, .colon:
             return true
         }
     }
@@ -130,12 +133,15 @@ public extension AToken.Content {
             return true
         case .plus, .minus, .asterisk, .divide, .remainder, .power:
             return true
-        case .greaterThan, .lessThan, .greaterThanOrEqual, .lessThanOrEqual, .equal, .and, .or, .not, .absolute, .questionMark, .colon:
+        case .greaterThan, .lessThan, .greaterThanOrEqual, .lessThanOrEqual, .equal, .and, .or,
+             .not, .absolute, .questionMark, .colon:
             return true
         }
     }
 
-    func toString(rows rowNamesDict: [Int: String], functions functionNamesDict: [Int: String]) -> String {
+    func toString(
+        rows rowNamesDict: [Int: String], functions functionNamesDict: [Int: String]
+    ) -> String {
         switch self {
         case .leftParenthesis:
             return "("
@@ -197,18 +203,52 @@ public extension AToken.Content {
 
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 public extension AToken {
+    // 定义不同层级括号在浅色主题下的颜色，与Material Theme保持一致
+    private func lightThemeColorsForParentheses() -> [Color] {
+        return [
+            Color(red: 0.129, green: 0.588, blue: 0.953), // Blue 600
+            Color(red: 0.184, green: 0.804, blue: 0.443), // Green 500
+            Color(red: 0.612, green: 0.259, blue: 0.706), // Purple 500
+            Color(red: 0.933, green: 0.298, blue: 0.627), // Pink 500
+            Color(red: 1.0, green: 0.651, blue: 0.0),    // Orange 500
+        ]
+    }
+
+    // 定义不同层级括号在深色主题下的颜色，与Material Theme保持一致
+    private func darkThemeColorsForParentheses() -> [Color] {
+        return [
+            Color(red: 0.412, green: 0.749, blue: 1.0),   // Blue 300
+            Color(red: 0.463, green: 0.933, blue: 0.647), // Green 300
+            Color(red: 0.776, green: 0.588, blue: 0.839), // Purple 300
+            Color(red: 1.0, green: 0.659, blue: 0.824),   // Pink 300
+            Color(red: 1.0, green: 0.827, blue: 0.529),   // Orange 300
+        ]
+    }
+
+    func color(for colorScheme: SwiftUI.ColorScheme) -> Color {
+        switch colorScheme {
+        case .light:
+            return colorForLightTheme()
+        case .dark:
+            return colorForDarkTheme()
+        @unknown default:
+            return colorForLightTheme()
+        }
+    }
+
     func colorForLightTheme() -> Color {
         switch content {
         case .leftParenthesis, .rightParenthesis, .comma:
-            return Color(red: 0.027, green: 0.302, blue: 0.423) // Dark Blue
+            let colors = lightThemeColorsForParentheses()
+            return colors[level % colors.count]
         case .functionWithLeftParenthesis:
-            return Color(red: 0.733, green: 0.0, blue: 0.0) // Red
+            return Color(red: 0.898, green: 0.212, blue: 0.212) // Red 600
         case .value(let value):
             return value.type.colorForLightTheme()
         case .plus, .minus, .asterisk, .divide, .remainder, .power,
              .greaterThan, .lessThan, .greaterThanOrEqual, .lessThanOrEqual, .equal,
              .and, .or, .not, .absolute, .questionMark, .colon:
-            return Color(red: 0.627, green: 0.627, blue: 0.627) // Gray
+            return Color(red: 0.502, green: 0.502, blue: 0.502) // Gray 500
         case .row:
             return .accentColor
         }
@@ -217,15 +257,16 @@ public extension AToken {
     func colorForDarkTheme() -> Color {
         switch content {
         case .leftParenthesis, .rightParenthesis, .comma:
-            return Color(red: 0.608, green: 0.678, blue: 0.847) // Light Blue
+            let colors = darkThemeColorsForParentheses()
+            return colors[level % colors.count]
         case .functionWithLeftParenthesis:
-            return Color(red: 0.945, green: 0.329, blue: 0.404) // Light Red
+            return Color(red: 1.0, green: 0.478, blue: 0.478) // Red 300
         case .value(let value):
             return value.type.colorForDarkTheme()
         case .plus, .minus, .asterisk, .divide, .remainder, .power,
              .greaterThan, .lessThan, .greaterThanOrEqual, .lessThanOrEqual, .equal,
              .and, .or, .not, .absolute, .questionMark, .colon:
-            return Color(red: 0.502, green: 0.502, blue: 0.502) // Gray
+            return Color(red: 0.749, green: 0.749, blue: 0.749) // Gray 300
         case .row:
             return .accentColor
         }
