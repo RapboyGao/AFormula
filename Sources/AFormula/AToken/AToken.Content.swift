@@ -3,7 +3,7 @@ import AValue
 // MARK: - Token
 
 public extension AToken {
-    enum Content: Hashable, Sendable, Codable, CustomStringConvertible {
+    enum Content: Hashable, Sendable, Codable, CustomStringConvertible, Identifiable {
         /// 左括号
         case leftParenthesis
         /// 右括号
@@ -35,6 +35,15 @@ public extension AToken {
 // MARK: - toString
 
 public extension AToken.Content {
+    static let basicOperators: [AToken.Content] = [
+        .plus,
+        .minus,
+        .asterisk,
+        .divide
+    ]
+
+    var id: AToken.Content { self }
+
     var description: String {
         switch self {
         case .leftParenthesis:

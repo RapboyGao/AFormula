@@ -24,12 +24,12 @@ public struct ATokensEditView: View {
             }
 
             Text(status.numberInputString)
+                .underline()
                 .foregroundColor(AValueType.number.color(for: colorScheme))
 
             Group {
                 if status.isDraggingCursor {
                     AInputCursorNonAlternating()
-
                 } else {
                     TextField("", text: .constant(""))
                         .focused($focused)
@@ -67,7 +67,7 @@ private struct ATokenEditPreview: View {
         VStack {
             ATokensEditView(status: $status)
             ATokensIPhoneKeyboard(status: $status)
-                .frame(height: 350)
+                .frame(height: 300)
         }
     }
 }

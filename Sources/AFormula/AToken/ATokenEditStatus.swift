@@ -19,6 +19,10 @@ public struct ATokenEditStatus: Hashable, Sendable, Codable {
         canInsertNumber && numberInputString.isEmpty
     }
 
+    var currentLevel: Int {
+        tokensBeforeCursor.last?.level ?? 0
+    }
+
     mutating func clearNumberInput() {
         numberInputString = ""
     }
@@ -96,9 +100,28 @@ public struct ATokenEditStatus: Hashable, Sendable, Codable {
         tokensAfterCursor = afterCursor
     }
 
+    mutating func normalize() {
+        let level = tokensBeforeCursor.normalize(startingFrom: 0)
+        _ = tokensAfterCursor.normalize(startingFrom: level)
+    }
+
     mutating func insert(_ newToken: AToken.Content) {
         trySubmitNumberInput()
-        tokensBeforeCursor.append(AToken(newToken))
+        switch newToken {
+        case .leftParenthesis, .functionWithLeftParenthesis:
+            tokensBeforeCursor.append(AToken(newToken, level: currentLevel + 1))
+        case .rightParenthesis:
+            tokensBeforeCursor.append(AToken(newToken, level: currentLevel))
+        default:
+            tokensBeforeCursor.append(AToken(newToken, level: currentLevel))
+        }
+    }
+
+    mutating func insertPairOfParenthesis() {
+        let newLevel = currentLevel + 1
+        tokensBeforeCursor.append(AToken(.leftParenthesis, level: newLevel))
+        tokensAfterCursor.append(AToken(.rightParenthesis, level: newLevel))
+        normalize()
     }
 
     // 尝试删除光标左侧的一个token
@@ -112,10 +135,10 @@ public struct ATokenEditStatus: Hashable, Sendable, Codable {
     }
 
     // 尝试删除光标右侧的一个token
-    mutating func tryDeleteRight() {
-        guard !tokensAfterCursor.isEmpty else { return }
-        tokensAfterCursor.removeFirst()
-    }
+//    mutating func tryDeleteRight() {
+//        guard !tokensAfterCursor.isEmpty else { return }
+//        tokensAfterCursor.removeFirst()
+//    }
 
     // 尝试将光标左移一位
     mutating func tryMoveLeft() {
