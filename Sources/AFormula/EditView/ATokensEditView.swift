@@ -1,3 +1,4 @@
+import AValue
 import AViewUI
 
 #if os(iOS)
@@ -7,6 +8,8 @@ public struct ATokensEditView: View {
     @Binding var status: ATokenEditStatus
     @FocusState private var focused: Bool
     @State private var dragPosition = CGPoint()
+
+    @Environment(\.colorScheme) private var colorScheme
 
     public var body: some View {
         AWrappingStack {
@@ -19,6 +22,9 @@ public struct ATokensEditView: View {
                     status.setCursor(toAfter: bindToken.wrappedValue)
                 }
             }
+
+            Text(status.numberInputString)
+                .foregroundColor(AValueType.number.color(for: colorScheme))
 
             Group {
                 if status.isDraggingCursor {
@@ -60,8 +66,8 @@ private struct ATokenEditPreview: View {
     var body: some View {
         VStack {
             ATokensEditView(status: $status)
-            ADragCursorView(status: $status)
-                .padding(3)
+            ATokensIPhoneKeyboard(status: $status)
+                .frame(height: 350)
         }
     }
 }

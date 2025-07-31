@@ -60,7 +60,7 @@ import SwiftUI
 
         public var body: some View {
             GeometryReader { geometry in
-                ZStack {
+                VStack(alignment: .center, spacing: 0) { // 明确设置垂直居中对齐
                     RoundedRectangle(cornerRadius: 10)
                         .fill(
                             LinearGradient(
@@ -76,7 +76,7 @@ import SwiftUI
                             RoundedRectangle(cornerRadius: 10)
                                 .fill(touchPositionGradient)
                         )
-                        .frame(width: geometry.size.width, height: 32)
+                        .frame(width: geometry.size.width, height: status.isDraggingCursor ? 10 : 32)
                         .shadow(
                             color: status.isDraggingCursor
                                 ? color.opacity(0.4) : .black.opacity(0.15),
@@ -88,6 +88,7 @@ import SwiftUI
                         .onAppear { geometryWidth = geometry.size.width }
                         .onChange(of: geometry.size.width) { geometryWidth = $0 }
                 }
+                .frame(maxHeight: .infinity) // 让VStack占满GeometryReader的高度
                 .simultaneousGesture(dragGesture)
             }
             .frame(height: 32)
