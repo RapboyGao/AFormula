@@ -16,7 +16,7 @@ public struct AValueScrollView: View {
     public var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 5)
-                .fill(AKeyColors.defaultColors.getColor(false, colorScheme))
+                .fill(AKeyColors.sameAsBackground.getColor(false, colorScheme))
             LazyVStack(alignment: .center) {
                 ScrollView {
                     LazyHStack(alignment: .center, spacing: 15) {
@@ -30,7 +30,7 @@ public struct AValueScrollView: View {
                             } label: {
                                 Image(systemName: thisValueType.symbolName)
                                     .font(.system(size: 20))
-                                    .foregroundStyle(thisValueType.color(for: colorScheme))
+//                                    .foregroundStyle(thisValueType.color(for: colorScheme))
                             } cover: {
                                 AValueFSContent(value: $value, type: thisValueType, allowInput: true, name: "Input Value", unit: .constant(nil))
                             } onSheetClosed: {
