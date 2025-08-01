@@ -1,7 +1,9 @@
+import AValue
 import AViewUI
 import SwiftUI
 
-@available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
+#if os(iOS)
+@available(iOS 16, *)
 public struct ATokenMenu: View {
     @Binding var token: AToken
     @Environment(\.aFormulaEditingHelper) private var editingHelper
@@ -21,6 +23,8 @@ public struct ATokenMenu: View {
             if let tokenString = tokenString {
                 Text(tokenString)
                     .foregroundStyle(token.colorForLightTheme())
+            } else if case let .value(value) = token.content {
+                AValueAsArgumentView(value: value, precision: .fractionLength(0 ... 20), unit: nil, name: "Value")
             } else {
                 Text(token.placeholder ?? "??")
                     .foregroundStyle(.gray)
@@ -39,7 +43,7 @@ public struct ATokenMenu: View {
     }
 }
 
-@available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
+@available(iOS 16, *)
 private struct ATokenMenuPreview: View {
     @State private var token = AToken(.row(id: 1))
 
@@ -51,7 +55,9 @@ private struct ATokenMenuPreview: View {
     }
 }
 
-@available(iOS 15, macOS 12, tvOS 15, watchOS 8, *)
+@available(iOS 16, *)
 #Preview {
     ATokenMenuPreview()
 }
+
+#endif
