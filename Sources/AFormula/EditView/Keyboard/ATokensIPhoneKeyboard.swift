@@ -21,6 +21,7 @@ public struct ATokensIPhoneKeyboard: View {
     @ViewBuilder
     private var numericKeyboard: some View {
         KeyBoardSpaceAroundStack(columns: 4, rowSpace: 10, columnSpace: 10) {
+            // 第1行 ---
             tokenButton(.divide)
 
             AFunctionsMenuKeyButton(helper.functionGroups) { thisFunction in
@@ -37,6 +38,7 @@ public struct ATokensIPhoneKeyboard: View {
                 Image(systemName: "delete.backward")
             }
 
+            // 第2行 ---
             tokenButton(.plus)
 
             ForEach(1 ..< 4) { int in
@@ -47,6 +49,7 @@ public struct ATokensIPhoneKeyboard: View {
                 }
             }
 
+            // 第3行 ---
             tokenButton(.minus)
 
             ForEach(4 ..< 7) { int in
@@ -57,6 +60,7 @@ public struct ATokensIPhoneKeyboard: View {
                 }
             }
 
+            // 第4行 ---
             tokenButton(.asterisk)
 
             ForEach(7 ..< 10) { int in
@@ -67,6 +71,7 @@ public struct ATokensIPhoneKeyboard: View {
                 }
             }
 
+            // 第5行 ---
             AKeyButton(colors: .sameAsBackground) {
                 //
             } content: { _ in
@@ -94,14 +99,16 @@ public struct ATokensIPhoneKeyboard: View {
     }
 
     public var body: some View {
-        AKeyboardBackgroundView { _ in
-            VStack {
-//                ADragCursorView(status: $status)
-                AValueScrollView { someValue in
-                    status.insert(.value(someValue))
-                }
+        VStack {
+            ADragCursorView(status: $status)
+            AKeyboardBackgroundView { _ in
+                VStack {
+                    AValueScrollView { someValue in
+                        status.insert(.value(someValue))
+                    }
 
-                numericKeyboard
+                    numericKeyboard
+                }
             }
         }
     }

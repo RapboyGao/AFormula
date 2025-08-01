@@ -19,7 +19,7 @@ public struct AValueScrollView: View {
                 .fill(AKeyColors.defaultColors.getColor(false, colorScheme))
             LazyVStack(alignment: .center) {
                 ScrollView {
-                    LazyHStack(alignment: .center) {
+                    LazyHStack(alignment: .center, spacing: 15) {
                         ForEach(types) { thisValueType in
                             ASheetButton {
                                 guard let _ = value

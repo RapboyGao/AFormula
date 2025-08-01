@@ -69,7 +69,7 @@ private struct ATokenEditPreview: View {
                 ATokensEditView(status: $status)
                 Spacer()
                 ATokensIPhoneKeyboard(status: $status)
-                    .frame(height: 300)
+                    .frame(height: 380)
             }
         }
     }
