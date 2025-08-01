@@ -22,78 +22,88 @@ public struct ATokensIPhoneKeyboard: View {
     private var numericKeyboard: some View {
         KeyBoardSpaceAroundStack(columns: 4, rowSpace: 10, columnSpace: 10) {
             // 第1行 ---
-            tokenButton(.divide)
+            Group {
+                tokenButton(.divide)
 
-            AFunctionsMenuKeyButton(helper.functionGroups) { thisFunction in
-                status.insert(func: thisFunction)
-            }
+                AFunctionsMenuKeyButton(helper.functionGroups) { thisFunction in
+                    status.insert(func: thisFunction)
+                }
 
-            ASectionsMenuKeyButton(helper.sections) { row in
-                status.insert(.row(id: row.id))
-            }
+                ASectionsMenuKeyButton(helper.sections) { row in
+                    status.insert(.row(id: row.id))
+                }
 
-            AKeyButton {
-                status.tryDeleteLeft()
-            } content: { _ in
-                Image(systemName: "delete.backward")
+                AKeyButton {
+                    status.tryDeleteLeft()
+                } content: { _ in
+                    Image(systemName: "delete.backward")
+                }
             }
 
             // 第2行 ---
-            tokenButton(.plus)
+            Group {
+                tokenButton(.plus)
 
-            ForEach(1 ..< 4) { int in
-                AKeyButton {
-                    status.numberInputString += int.description
-                } content: { _ in
-                    ANumKeyVStack(int)
+                ForEach(1 ..< 4) { int in
+                    AKeyButton {
+                        status.numberInputString += int.description
+                    } content: { _ in
+                        ANumKeyVStack(int)
+                    }
                 }
             }
 
             // 第3行 ---
-            tokenButton(.minus)
+            Group {
+                tokenButton(.minus)
 
-            ForEach(4 ..< 7) { int in
-                AKeyButton {
-                    status.numberInputString += int.description
-                } content: { _ in
-                    ANumKeyVStack(int)
+                ForEach(4 ..< 7) { int in
+                    AKeyButton {
+                        status.numberInputString += int.description
+                    } content: { _ in
+                        ANumKeyVStack(int)
+                    }
                 }
             }
 
             // 第4行 ---
-            tokenButton(.asterisk)
+            Group {
+                tokenButton(.asterisk)
 
-            ForEach(7 ..< 10) { int in
-                AKeyButton {
-                    status.numberInputString += int.description
-                } content: { _ in
-                    ANumKeyVStack(int)
+                ForEach(7 ..< 10) { int in
+                    AKeyButton {
+                        status.numberInputString += int.description
+                    } content: { _ in
+                        ANumKeyVStack(int)
+                    }
                 }
             }
 
             // 第5行 ---
-            AKeyButton(colors: .sameAsBackground) {
-                //
-            } content: { _ in
-                Text("+ - =")
-            }
+            Group {
+                AKeyButton(colors: .sameAsBackground) {
+                    //
+                } content: { _ in
+                    Text("+ - =")
+                }
 
-            AKeyButton(colors: .sameAsBackground) {
-                status.numberInputString += "."
-            } content: { _ in
-                Text(".")
-            }
+                AKeyButton(colors: .sameAsBackground) {
+                    status.numberInputString += "."
+                } content: { _ in
+                    Text(".")
+                }
 
-            AKeyButton {
-                status.numberInputString += "0"
-            } content: { _ in
-                ANumKeyVStack(0)
-            }
+                AKeyButton {
+                    status.numberInputString += "0"
+                } content: { _ in
+                    ANumKeyVStack(0)
+                }
 
-            AKeyButton(colors: .sameAsBackground) {
-                status.insertPairOfParenthesis()
-            } content: { _ in
-                Text("( )")
+                AKeyButton(colors: .sameAsBackground) {
+                    status.insertPairOfParenthesis()
+                } content: { _ in
+                    Text("( )")
+                }
             }
         }
     }
