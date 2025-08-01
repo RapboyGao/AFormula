@@ -27,8 +27,8 @@ public struct ATokensIPhoneKeyboard: View {
                 status.insert(func: thisFunction)
             }
 
-            AValuesMenuKeyButton { value in
-                status.insert(.value(value))
+            ASectionsMenuKeyButton(helper.sections) { row in
+                status.insert(.row(id: row.id))
             }
 
             AKeyButton {
@@ -97,6 +97,10 @@ public struct ATokensIPhoneKeyboard: View {
         AKeyboardBackgroundView { _ in
             VStack {
 //                ADragCursorView(status: $status)
+                AValueScrollView { someValue in
+                    status.insert(.value(someValue))
+                }
+
                 numericKeyboard
             }
         }
