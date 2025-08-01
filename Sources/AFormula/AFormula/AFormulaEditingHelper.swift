@@ -6,6 +6,7 @@ public struct AFormulaEditingHelper: Sendable, EnvironmentKey {
     public private(set) var functions: [AFunction]
     public private(set) var rowDict: [Int: String]
     public private(set) var functionNameDict: [Int: String]
+    public private(set) var functionGroups: [AFunctionGroup]
 
     public init(sections: [ASectionAbstract], functions: [AFunction]) {
         self.sections = sections
@@ -20,6 +21,7 @@ public struct AFormulaEditingHelper: Sendable, EnvironmentKey {
                 rowDict[row.id] = row.shownName
             }
         }
+        self.functionGroups = .init(functions)
     }
 
     public static let defaultValue: AFormulaEditingHelper = {

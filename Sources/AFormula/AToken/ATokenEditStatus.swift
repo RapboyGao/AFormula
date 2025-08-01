@@ -1,3 +1,4 @@
+import AFunction
 import Foundation
 
 public struct ATokenEditStatus: Hashable, Sendable, Codable {
@@ -132,6 +133,40 @@ public struct ATokenEditStatus: Hashable, Sendable, Codable {
         }
         guard !tokensBeforeCursor.isEmpty else { return }
         tokensBeforeCursor.removeLast()
+    }
+
+    mutating func insert(func aFunction: AFunction) {
+        tokensBeforeCursor.append(.init(.functionWithLeftParenthesis(id: aFunction.id)))
+
+        func _handle(_ args: [AFunction.Argument]) {
+            for (index, argument) in args.enumerated() {
+                if index >= 1 {
+                    tokensBeforeCursor.append(.init(.comma))
+                }
+                let thisToken = AToken(.row(id: UUID().hashValue), placeholder: argument.name)
+                tokensBeforeCursor.append(thisToken)
+            }
+        }
+        switch aFunction.arguments {
+        case let .finite(arguments):
+            _handle(arguments)
+
+        case let .withOptional(arguments, optionals: optionals):
+            let optionals = optionals.map { arg in
+                var arg = arg
+                arg.name = arg.name + "?"
+                return arg
+            }
+            _handle(arguments + optionals)
+
+        case let .withInfinite(arguments, infinite: infinite):
+            var infinite = infinite
+            infinite.name = infinite.name + ".."
+            _handle(arguments + [infinite])
+        }
+
+        tokensBeforeCursor.append(AToken(.rightParenthesis))
+        normalize()
     }
 
     // 尝试删除光标右侧的一个token

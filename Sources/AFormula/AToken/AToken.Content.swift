@@ -125,7 +125,7 @@ public extension AToken.Content {
 
     func toString(
         rows rowNamesDict: [Int: String], functions functionNamesDict: [Int: String]
-    ) -> String {
+    ) -> String? {
         switch self {
         case .leftParenthesis:
             return "("
@@ -145,7 +145,7 @@ public extension AToken.Content {
             if let rowName = rowNamesDict[id] {
                 return rowName
             } else {
-                return "??"
+                return nil
             }
         case .plus:
             return " + "

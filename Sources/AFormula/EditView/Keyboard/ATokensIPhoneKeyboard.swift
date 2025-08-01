@@ -6,6 +6,7 @@ import AViewUI
 @available(iOS 16, *)
 public struct ATokensIPhoneKeyboard: View {
     @Binding var status: ATokenEditStatus
+    @Environment(\.aFormulaEditingHelper) private var helper
 
     @ViewBuilder
     private func tokenButton(_ token: AToken.Content) -> some View {
@@ -22,23 +23,12 @@ public struct ATokensIPhoneKeyboard: View {
         KeyBoardSpaceAroundStack(columns: 4, rowSpace: 10, columnSpace: 10) {
             tokenButton(.divide)
 
-            AKeyButton {
-                //
-            } content: { _ in
-                Image(systemName: "function")
-                    .font(.system(size: 23))
+            AFunctionsMenuKeyButton(helper.functionGroups) { thisFunction in
+                status.insert(func: thisFunction)
             }
 
-            AKeyButton {
-                //
-            } content: { _ in
-                VStack {
-                    HStack {
-                        Image(systemName: AValueType.location.symbolName)
-                        Image(systemName: AValueType.calendar.symbolName)
-                    }
-                    Image(systemName: AValueType.point.symbolName)
-                }
+            AValuesMenuKeyButton { value in
+                status.insert(.value(value))
             }
 
             AKeyButton {

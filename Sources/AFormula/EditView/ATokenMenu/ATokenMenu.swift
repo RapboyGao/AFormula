@@ -10,17 +10,21 @@ public struct ATokenMenu: View {
     var cursorToLeft: () -> Void
     var cursorToRight: () -> Void
 
-    private var tokenString: String {
+    private var tokenString: String? {
         token.toString(rows: editingHelper.rowDict, functions: editingHelper.functionNameDict)
     }
 
     public var body: some View {
         Menu {
-            Text(tokenString)
             Button("Delete", systemImage: "trash", role: .destructive, action: handleDelete)
         } label: {
-            Text(tokenString)
-                .foregroundStyle(token.colorForLightTheme())
+            if let tokenString = tokenString {
+                Text(tokenString)
+                    .foregroundStyle(token.colorForLightTheme())
+            } else {
+                Text(token.placeholder ?? "??")
+                    .foregroundStyle(.gray)
+            }
         }
     }
 

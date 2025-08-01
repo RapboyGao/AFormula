@@ -64,10 +64,13 @@ private struct ATokenEditPreview: View {
     @State private var status = ATokenEditStatus(formula: AFormula.example)
 
     var body: some View {
-        VStack {
-            ATokensEditView(status: $status)
-            ATokensIPhoneKeyboard(status: $status)
-                .frame(height: 300)
+        NavigationStack {
+            VStack {
+                ATokensEditView(status: $status)
+                Spacer()
+                ATokensIPhoneKeyboard(status: $status)
+                    .frame(height: 300)
+            }
         }
     }
 }
