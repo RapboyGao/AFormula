@@ -26,6 +26,7 @@ public struct ASectionsMenuKeyButton: View {
             AKeyButton {} content: { _ in
                 Image(systemName: "list.bullet.indent")
                     .font(.system(size: 23))
+                    .foregroundColor(.primary)
             }
         }
     }

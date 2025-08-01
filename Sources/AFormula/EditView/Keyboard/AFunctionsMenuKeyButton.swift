@@ -24,6 +24,7 @@ public struct AFunctionsMenuKeyButton: View {
             AKeyButton {} content: { _ in
                 Image(systemName: "function")
                     .font(.system(size: 23))
+                    .foregroundColor(.primary)
             }
         }
     }
