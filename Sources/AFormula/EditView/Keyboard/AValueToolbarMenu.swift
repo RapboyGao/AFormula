@@ -11,18 +11,27 @@ private struct AValueToolbarContent: View {
 
     @Environment(\.dismiss) private var dismiss
 
+    private var buttonText: String {
+        guard value != nil
+        else {
+            return I18n.cancel
+        }
+        return I18n.done
+    }
+
     var body: some View {
         AValueFSContent(value: $value, type: valueType, allowInput: true, name: I18n.newValue, unit: .constant(nil))
             .statusBarHidden()
             .navigationBarBackButtonHidden()
             .toolbar {
-                Button("Done") {
+                Button(buttonText) {
                     dismiss()
-                    guard let value = value
+                    guard let newValue = value
                     else {
                         return
                     }
-                    action(value)
+                    action(newValue)
+                    self.value = nil
                 }
             }
     }
@@ -37,7 +46,7 @@ public struct AValueToolbarMenu: View {
     let types = AValueType.allCases.dropFirst()
 
     public var body: some View {
-        Menu("Insert", systemImage: "plus") {
+        Menu(I18n.insert, systemImage: "plus") {
             ForEach(types) { valueType in
                 NavigationLink {
                     AValueToolbarContent(value: $value, action: action, valueType: valueType)
@@ -55,7 +64,7 @@ public struct AValueToolbarMenu: View {
 
 @available(iOS 16, *)
 #Preview {
-    AValueScrollView { value in
+    AValueToolbarMenu { value in
         print(value)
     }
 }
