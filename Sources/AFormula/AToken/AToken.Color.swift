@@ -69,3 +69,21 @@ public extension AToken {
         }
     }
 }
+
+@available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
+public extension AToken {
+    func attributedString(
+        colorScheme: ColorScheme, rows rowNamesDict: [Int: String],
+        functions functionNamesDict: [Int: String]
+    ) -> AttributedString {
+        if let string = toString(rows: rowNamesDict, functions: functionNamesDict) {
+            var attributedString = AttributedString(string)
+            attributedString.foregroundColor = color(for: colorScheme)
+            return attributedString
+        } else {
+            var attributedString = AttributedString("??")
+            attributedString.foregroundColor = color(for: colorScheme)
+            return attributedString
+        }
+    }
+}

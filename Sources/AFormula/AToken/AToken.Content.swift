@@ -39,7 +39,7 @@ public extension AToken.Content {
         .plus,
         .minus,
         .asterisk,
-        .divide
+        .divide,
     ]
 
     var id: AToken.Content { self }
