@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "AFormula",
+    defaultLocalization: "en",
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
@@ -25,7 +26,8 @@ let package = Package(
                 .product(name: "AValue", package: "AValue"),
                 .product(name: "AFunction", package: "AFunction"),
                 .product(name: "AUnit", package: "AUnit"),
-            ]),
+            ],
+            resources: [.process("Resources")]),
         .testTarget(
             name: "AFormulaTests",
             dependencies: ["AFormula"]),

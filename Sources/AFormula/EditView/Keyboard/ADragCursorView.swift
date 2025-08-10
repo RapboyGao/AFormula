@@ -36,13 +36,18 @@ import AViewUI
 
         public var body: some View {
             GeometryReader { _ in
-                RoundedRectangle(cornerRadius: 5)
-                    .fill(
-                        AKeyColors.defaultColors.getColor(status.isDraggingCursor, colorScheme)
-                    )
-                    .frame(maxHeight: .infinity) // 让VStack占满GeometryReader的高度
-                    .simultaneousGesture(dragGesture)
-                    .animation(.easeInOut(duration: 0.1), value: status.isDraggingCursor)
+                ZStack {
+                    RoundedRectangle(cornerRadius: 5)
+                        .fill(
+                            AKeyColors.defaultColors.getColor(status.isDraggingCursor, colorScheme)
+                        )
+                    Text(I18n.dragToMoveTheCursor)
+                        .foregroundStyle(.gray)
+                        .scaleEffect(status.isDraggingCursor ? 0 : 1)
+                }
+                .frame(maxHeight: .infinity) // 让VStack占满GeometryReader的高度
+                .simultaneousGesture(dragGesture)
+                .animation(.easeInOut(duration: 0.2), value: status.isDraggingCursor)
             }
             .frame(height: 30)
         }
