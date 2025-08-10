@@ -28,11 +28,17 @@ public struct ATokensEditView: View {
                 .foregroundColor(AValueType.number.color(for: colorScheme))
 
             Group {
-                if status.isDraggingCursor {
-                    AInputCursorNonAlternating()
-                } else {
+                ZStack {
+                    if status.isDraggingCursor {
+                        AInputCursorNonAlternating()
+                    }
                     TextField("", text: .constant(""))
+                        .aKeyboardView { _ in
+                            ATokensIPhoneKeyboard(status: $status)
+                                .frame(height: 380)
+                        }
                         .focused($focused)
+                        .opacity(status.isDraggingCursor ? 0 : 1)
                 }
             }
             .frame(width: 3)
