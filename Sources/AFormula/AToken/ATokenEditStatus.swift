@@ -111,8 +111,10 @@ public struct ATokenEditStatus: Hashable, Sendable, Codable {
         switch newToken {
         case .leftParenthesis, .functionWithLeftParenthesis:
             tokensBeforeCursor.append(AToken(newToken, level: currentLevel + 1))
+            normalize()
         case .rightParenthesis:
             tokensBeforeCursor.append(AToken(newToken, level: currentLevel))
+            normalize()
         default:
             tokensBeforeCursor.append(AToken(newToken, level: currentLevel))
         }
@@ -132,7 +134,13 @@ public struct ATokenEditStatus: Hashable, Sendable, Codable {
             return
         }
         guard !tokensBeforeCursor.isEmpty else { return }
-        tokensBeforeCursor.removeLast()
+        let removedToken = tokensBeforeCursor.removeLast()
+        switch removedToken.content {
+        case .leftParenthesis, .functionWithLeftParenthesis, .rightParenthesis:
+            normalize()
+        default:
+            ()
+        }
     }
 
     mutating func insert(func aFunction: AFunction) {
