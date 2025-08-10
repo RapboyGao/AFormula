@@ -8,9 +8,21 @@ public struct ATokensIPhoneKeyboard: View {
     @Binding var status: ATokenEditStatus
     @Environment(\.aFormulaEditingHelper) private var helper
 
+    @State private var usingSymbolKeyboard = true
+
     @ViewBuilder
     private func tokenButton(_ token: AToken.Content) -> some View {
         AKeyButton {
+            status.insert(token)
+        } content: { _ in
+            Text(token.description)
+                .font(.system(size: 25))
+        }
+    }
+
+    @ViewBuilder
+    private func tokenButtonAsBG(_ token: AToken.Content) -> some View {
+        AKeyButton(colors: .sameAsBackground) {
             status.insert(token)
         } content: { _ in
             Text(token.description)
@@ -82,7 +94,7 @@ public struct ATokensIPhoneKeyboard: View {
             // 第5行 ---
             Group {
                 AKeyButton(colors: .sameAsBackground) {
-                    //
+                    usingSymbolKeyboard.toggle()
                 } content: { _ in
                     Text("+ - =")
                 }
@@ -108,6 +120,56 @@ public struct ATokensIPhoneKeyboard: View {
         }
     }
 
+    @ViewBuilder
+    private var symbolsKeyboard: some View {
+        KeyBoardSpaceAroundStack(columns: 4, rowSpace: 10, columnSpace: 10) {
+            // 第1行 ---
+            Group {
+                tokenButton(.divide)
+                tokenButton(.comma)
+                tokenButton(.questionMark)
+                tokenButton(.colon)
+            }
+
+            // 第2行 ---
+            Group {
+                tokenButton(.plus)
+                tokenButton(.equal)
+                tokenButton(.greaterThan)
+                tokenButton(.greaterThanOrEqual)
+            }
+
+            // 第3行 ---
+            Group {
+                tokenButton(.minus)
+                tokenButton(.absolute)
+                tokenButton(.lessThan)
+                tokenButton(.lessThanOrEqual)
+            }
+
+            // 第4行 ---
+            Group {
+                tokenButton(.asterisk)
+                tokenButton(.and)
+                tokenButton(.or)
+                tokenButton(.not)
+            }
+
+            // 第5行 ---
+            Group {
+                AKeyButton(colors: .sameAsBackground) {
+                    usingSymbolKeyboard.toggle()
+                } content: { _ in
+                    Text("123")
+                }
+
+                tokenButtonAsBG(.leftParenthesis)
+                tokenButton(.power)
+                tokenButtonAsBG(.rightParenthesis)
+            }
+        }
+    }
+
     public var body: some View {
         VStack {
             AKeyboardBackgroundView { _ in
@@ -117,7 +179,11 @@ public struct ATokensIPhoneKeyboard: View {
                     }
                     ADragCursorView(status: $status)
                         .padding([.leading, .trailing], 10)
-                    numericKeyboard
+                    if usingSymbolKeyboard {
+                        symbolsKeyboard
+                    } else {
+                        numericKeyboard
+                    }
                 }
             }
         }
