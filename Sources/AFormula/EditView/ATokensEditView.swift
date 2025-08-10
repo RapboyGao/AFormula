@@ -65,6 +65,10 @@ public struct ATokensEditView: View {
             focused = true
         }
     }
+
+    public init(status: Binding<ATokenEditStatus>) {
+        _status = status
+    }
 }
 
 @available(iOS 16, *)
