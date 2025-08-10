@@ -10,6 +10,7 @@ public struct ATokensEditView: View {
     @State private var dragPosition = CGPoint()
 
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.aFormulaEditingHelper) private var helper
 
     public var body: some View {
         AWrappingStack {
@@ -35,6 +36,7 @@ public struct ATokensEditView: View {
                     TextField("", text: .constant(""))
                         .aKeyboardView { _ in
                             ATokensIPhoneKeyboard(status: $status)
+                                .environment(\.aFormulaEditingHelper, helper)
                                 .frame(height: 380)
                         }
                         .focused($focused)
