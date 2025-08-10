@@ -7,7 +7,7 @@ import AViewUI
 public struct AFormulaEditButton: View {
     @Binding var formula: AFormula
     @Environment(\.aFormulaEditingHelper) private var helper
-    @Binding private var status: ATokenEditStatus
+    @State private var status: ATokenEditStatus
 
     private var newFormula: AFormula? {
         try? status.toFormula()
@@ -29,7 +29,7 @@ public struct AFormulaEditButton: View {
 
     public init(_ formula: Binding<AFormula>) {
         _formula = formula
-        _status = State(initialValue: ATokenEditStatus(formula: formula.wrappedValue)).projectedValue
+        _status = State(initialValue: ATokenEditStatus(formula: formula.wrappedValue))
     }
 }
 
