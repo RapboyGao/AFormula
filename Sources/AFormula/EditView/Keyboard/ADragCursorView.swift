@@ -1,6 +1,35 @@
 import AViewUI
+import CoreHaptics
 
 #if os(iOS)
+
+    @available(iOS 13.0, *)
+    private struct MyHaptics {
+        static let supportsHaptics = CHHapticEngine.capabilitiesForHardware().supportsHaptics
+        static let engine = try? CHHapticEngine()
+
+        static func vibrateShortAndLight() throws {
+            guard supportsHaptics else { return }
+            let event = CHHapticEvent(
+                eventType: .hapticContinuous,
+                parameters: [
+                    CHHapticEventParameter(
+                        parameterID: .hapticIntensity,
+                        value: 0.5
+                    ),
+                    CHHapticEventParameter(
+                        parameterID: .hapticSharpness,
+                        value: 0.5
+                    ),
+                ],
+                relativeTime: 0,
+                duration: 0.1
+            )
+            let pattern = try CHHapticPattern(events: [event], parameters: [])
+            let player = try engine?.makePlayer(with: pattern)
+            try player?.start(atTime: 0)
+        }
+    }
 
     @available(iOS 16, *)
     public struct ADragCursorView: View {
@@ -22,8 +51,10 @@ import AViewUI
                     let currentPositionRounded = round(touchPosition.x / interval) * interval
                     if currentPositionRounded > previousPositionRounded {
                         status.tryMoveRight()
+                        try? MyHaptics.vibrateShortAndLight()
                     } else if currentPositionRounded < previousPositionRounded {
                         status.tryMoveLeft()
+                        try? MyHaptics.vibrateShortAndLight()
                     }
                     previousPosition = touchPosition
                 }
@@ -56,7 +87,7 @@ import AViewUI
         }
 
         public init(status: Binding<ATokenEditStatus>, interval: CGFloat = 15) {
-            self._status = status
+            _status = status
             self.interval = interval
         }
     }
