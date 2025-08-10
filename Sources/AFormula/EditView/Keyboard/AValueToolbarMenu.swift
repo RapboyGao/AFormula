@@ -4,6 +4,31 @@ import AViewUI
 #if os(iOS)
 
 @available(iOS 16, *)
+private struct AValueToolbarContent: View {
+    @Binding var value: AValue?
+    var action: (AValue) -> Void
+    var valueType: AValueType
+
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        AValueFSContent(value: $value, type: valueType, allowInput: true, name: I18n.newValue, unit: .constant(nil))
+            .statusBarHidden()
+            .navigationBarBackButtonHidden()
+            .toolbar {
+                Button("Done") {
+                    dismiss()
+                    guard let value = value
+                    else {
+                        return
+                    }
+                    action(value)
+                }
+            }
+    }
+}
+
+@available(iOS 16, *)
 public struct AValueToolbarMenu: View {
     @State private var value: AValue?
 
@@ -11,27 +36,13 @@ public struct AValueToolbarMenu: View {
 
     let types = AValueType.allCases.dropFirst()
 
-    @Environment(\.colorScheme) private var colorScheme
-
     public var body: some View {
         Menu("Insert", systemImage: "plus") {
-            ForEach(types) { thisValueType in
-                ASheetButton {
-                    guard let _ = value
-                    else {
-                        return .init(sheet: .fullScreenCover, button: .button, returnButton: .cancel)
-                    }
-                    return .init(sheet: .fullScreenCover, button: .button, returnButton: .done)
+            ForEach(types) { valueType in
+                NavigationLink {
+                    AValueToolbarContent(value: $value, action: action, valueType: valueType)
                 } label: {
-                    Label(thisValueType.name, systemImage: thisValueType.symbolName)
-                } cover: {
-                    AValueFSContent(value: $value, type: thisValueType, allowInput: true, name: "Input Value", unit: .constant(nil))
-                } onSheetClosed: {
-                    guard let value = value
-                    else {
-                        return
-                    }
-                    action(value)
+                    Label(valueType.name, systemImage: valueType.symbolName)
                 }
             }
         }
