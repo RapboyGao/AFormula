@@ -37,7 +37,7 @@ public struct ATokensEditView: View {
                         .aKeyboardView { _ in
                             ATokensIPhoneKeyboard(status: $status)
                                 .environment(\.aFormulaEditingHelper, helper)
-                                .frame(height: 380)
+                                .frame(height: 350)
                         }
                         .focused($focused)
                         .opacity(status.isDraggingCursor ? 0 : 1)
@@ -64,6 +64,13 @@ public struct ATokensEditView: View {
         .onAppear {
             focused = true
         }
+        .toolbar {
+            ToolbarItemGroup(placement: .topBarLeading) {
+                AValueToolbarMenu { value in
+                    status.insert(.value(value))
+                }
+            }
+        }
     }
 
     public init(status: Binding<ATokenEditStatus>) {
@@ -81,7 +88,7 @@ private struct ATokenEditPreview: View {
                 ATokensEditView(status: $status)
                 Spacer()
                 ATokensIPhoneKeyboard(status: $status)
-                    .frame(height: 380)
+                    .frame(height: 350)
             }
         }
     }

@@ -176,9 +176,7 @@ public struct ATokensIPhoneKeyboard: View {
         VStack {
             AKeyboardBackgroundView { _ in
                 VStack {
-                    AValueScrollView { someValue in
-                        status.insert(.value(someValue))
-                    }
+                    Spacer()
                     ADragCursorView(status: $status)
                         .padding([.leading, .trailing], 10)
                     if usingSymbolKeyboard {

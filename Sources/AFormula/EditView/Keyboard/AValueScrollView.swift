@@ -30,7 +30,6 @@ public struct AValueScrollView: View {
                             } label: {
                                 Image(systemName: thisValueType.symbolName)
                                     .font(.system(size: 20))
-//                                    .foregroundStyle(thisValueType.color(for: colorScheme))
                             } cover: {
                                 AValueFSContent(value: $value, type: thisValueType, allowInput: true, name: "Input Value", unit: .constant(nil))
                             } onSheetClosed: {
