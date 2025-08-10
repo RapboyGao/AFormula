@@ -18,7 +18,7 @@ public struct ATokenMenu: View {
 
     public var body: some View {
         Menu {
-            Button("Delete", systemImage: "trash", role: .destructive, action: handleDelete)
+            Button(I18n.delete, systemImage: "trash", role: .destructive, action: handleDelete)
         } label: {
             if let tokenString = tokenString {
                 Text(tokenString)

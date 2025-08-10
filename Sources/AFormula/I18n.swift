@@ -9,4 +9,6 @@ enum I18n {
         "Edit on the left", bundle: .module, comment: "Edit on the left / 在左侧编辑")
     static let editOnTheRight = NSLocalizedString(
         "Edit on the right", bundle: .module, comment: "Edit on the right / 在右侧编辑")
+    static let newValue = NSLocalizedString(
+        "New value", bundle: .module, comment: "New value / 新值")
 }

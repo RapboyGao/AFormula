@@ -8,12 +8,13 @@ public struct ATokensIPhoneKeyboard: View {
     @Binding var status: ATokenEditStatus
     @Environment(\.aFormulaEditingHelper) private var helper
 
-    @State private var usingSymbolKeyboard = true
+    @State private var usingSymbolKeyboard = false
 
     @ViewBuilder
     private func tokenButton(_ token: AToken.Content) -> some View {
         AKeyButton {
             status.insert(token)
+            usingSymbolKeyboard = false
         } content: { _ in
             Text(token.description)
                 .font(.system(size: 25))
@@ -24,6 +25,7 @@ public struct ATokensIPhoneKeyboard: View {
     private func tokenButtonAsBG(_ token: AToken.Content) -> some View {
         AKeyButton(colors: .sameAsBackground) {
             status.insert(token)
+            usingSymbolKeyboard = false
         } content: { _ in
             Text(token.description)
                 .font(.system(size: 25))
