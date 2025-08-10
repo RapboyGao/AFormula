@@ -196,4 +196,11 @@ public struct ATokenEditStatus: Hashable, Sendable, Codable {
         tokensAfterCursor = []
         numberInputString = ""
     }
+
+    func toFormula() throws -> AFormula {
+        var copied = self
+        copied.trySubmitNumberInput()
+        var parser = AFormulaParser(tokens: copied.tokensBeforeCursor + copied.tokensAfterCursor)
+        return try parser.parse()
+    }
 }

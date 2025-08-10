@@ -22,33 +22,34 @@ public struct ATokenMenu: View {
             Button(I18n.editOnTheLeft, systemImage: "arrow.left", action: cursorToLeft)
             Button(I18n.editOnTheRight, systemImage: "arrow.right", action: cursorToRight)
 
-            Menu {
-                ForEach(editingHelper.sections) { section in
-                    Menu(section.name) {
-                        ForEach(section.rows) { row in
-                            Button(row.name) {
-                                token.content = .row(id: row.id)
+            if token.content.isValue {
+                Menu {
+                    ForEach(editingHelper.sections) { section in
+                        Menu(section.name) {
+                            ForEach(section.rows) { row in
+                                Button(row.name) {
+                                    token.content = .row(id: row.id)
+                                }
                             }
                         }
                     }
+                } label: {
+                    Label(I18n.changeToVariable, systemImage: "list.bullet.indent")
                 }
-            } label: {
-                Label(I18n.changeToVariable, systemImage: "list.bullet.indent")
+                //            Menu {
+                //                ForEach(editingHelper.functionGroups) { funcGroup in
+                //                    Menu(funcGroup.id.shortName, systemImage: funcGroup.id.systemImage) {
+                //                        ForEach(funcGroup.functions) { someFunction in
+                //                            Button(someFunction.description) {
+                //                                //
+                //                            }
+                //                        }
+                //                    }
+                //                }
+                //            } label: {
+                //                Label(I18n.changeToVariable, systemImage: "list.bullet.indent")
+                //            }
             }
-
-//            Menu {
-//                ForEach(editingHelper.functionGroups) { funcGroup in
-//                    Menu(funcGroup.id.shortName, systemImage: funcGroup.id.systemImage) {
-//                        ForEach(funcGroup.functions) { someFunction in
-//                            Button(someFunction.description) {
-//                                //
-//                            }
-//                        }
-//                    }
-//                }
-//            } label: {
-//                Label(I18n.changeToVariable, systemImage: "list.bullet.indent")
-//            }
 
         } label: {
             if let tokenString = tokenString {

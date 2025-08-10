@@ -44,6 +44,15 @@ public extension AToken.Content {
 
     var id: AToken.Content { self }
 
+    var isValue: Bool {
+        switch self {
+        case .row, .value:
+            return true
+        default:
+            return false
+        }
+    }
+
     var description: String {
         switch self {
         case .leftParenthesis:
