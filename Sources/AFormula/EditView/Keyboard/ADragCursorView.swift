@@ -43,7 +43,7 @@ import CoreHaptics
         @State private var previousPosition = CGPoint()
 
         private var dragGesture: some Gesture {
-            DragGesture()
+            DragGesture(minimumDistance: 0)
                 .onChanged { value in
                     touchPosition = value.location
                     status.isDraggingCursor = true
@@ -86,7 +86,7 @@ import CoreHaptics
             .frame(height: 30)
         }
 
-        public init(status: Binding<ATokenEditStatus>, interval: CGFloat = 15) {
+        public init(status: Binding<ATokenEditStatus>, interval: CGFloat = 20) {
             _status = status
             self.interval = interval
         }
