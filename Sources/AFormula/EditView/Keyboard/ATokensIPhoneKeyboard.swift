@@ -110,13 +110,13 @@ public struct ATokensIPhoneKeyboard: View {
 
     public var body: some View {
         VStack {
-            ADragCursorView(status: $status)
             AKeyboardBackgroundView { _ in
                 VStack {
                     AValueScrollView { someValue in
                         status.insert(.value(someValue))
                     }
-
+                    ADragCursorView(status: $status)
+                        .padding([.leading, .trailing], 10)
                     numericKeyboard
                 }
             }
