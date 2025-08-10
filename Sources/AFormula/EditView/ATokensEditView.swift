@@ -12,6 +12,12 @@ public struct ATokensEditView: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.aFormulaEditingHelper) private var helper
 
+    private var tapFocus: some Gesture {
+        TapGesture().onEnded { _ in
+            focused = true
+        }
+    }
+
     public var body: some View {
         AWrappingStack {
             ForEach($status.tokensBeforeCursor) { bindToken in
@@ -71,6 +77,9 @@ public struct ATokensEditView: View {
                 }
             }
         }
+        .padding()
+        .font(.system(size: 22))
+        .simultaneousGesture(tapFocus)
     }
 
     public init(status: Binding<ATokenEditStatus>) {

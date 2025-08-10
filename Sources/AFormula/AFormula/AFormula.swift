@@ -369,3 +369,17 @@ public extension AFormula {
         self = someValue
     }
 }
+
+@available(macOS 12, iOS 15, tvOS 15, watchOS 8, *)
+public extension AFormula {
+    func attributedString(
+        colorScheme: ColorScheme,
+        rows rowNamesDict: [Int: String],
+        functions functionNamesDict: [Int: String]
+    ) -> AttributedString {
+        self.toTokens()
+            .reduce(AttributedString()) { partialResult, token in
+                partialResult + token.attributedString(colorScheme: colorScheme, rows: rowNamesDict, functions: functionNamesDict)
+            }
+    }
+}

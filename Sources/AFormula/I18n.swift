@@ -18,4 +18,8 @@ enum I18n {
         "Change to variable", bundle: .module, comment: "Change to variable / 改为变量")
     static let changeToFunction = NSLocalizedString(
         "Change to function", bundle: .module, comment: "Change to function / 改为函数")
+
+    static let done = NSLocalizedString("Done", bundle: .module, comment: "Done / 完成")
+    static let cancel = NSLocalizedString("Cancel", bundle: .module, comment: "Cancel / 取消")
+    static let insert = NSLocalizedString("Insert", bundle: .module, comment: "Insert / 插入")
 }
