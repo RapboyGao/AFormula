@@ -41,9 +41,12 @@ import AViewUI
                         .fill(
                             AKeyColors.defaultColors.getColor(status.isDraggingCursor, colorScheme)
                         )
-                    Text(I18n.dragToMoveTheCursor)
-                        .foregroundStyle(.gray)
-                        .scaleEffect(status.isDraggingCursor ? 0 : 1)
+                    if !status.isDraggingCursor {
+                        Text(I18n.dragToMoveTheCursor)
+                            .font(.system(size: 17))
+                            .foregroundStyle(.gray)
+                            .transition(.combined(.scale)(with: .opacity))
+                    }
                 }
                 .frame(maxHeight: .infinity) // 让VStack占满GeometryReader的高度
                 .simultaneousGesture(dragGesture)

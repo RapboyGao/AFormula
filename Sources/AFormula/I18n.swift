@@ -11,4 +11,11 @@ enum I18n {
         "Edit on the right", bundle: .module, comment: "Edit on the right / 在右侧编辑")
     static let newValue = NSLocalizedString(
         "New value", bundle: .module, comment: "New value / 新值")
+    // "改为"
+    static let changeTo = NSLocalizedString(
+        "Change to", bundle: .module, comment: "Change to / 改为")
+    static let changeToVariable = NSLocalizedString(
+        "Change to variable", bundle: .module, comment: "Change to variable / 改为变量")
+    static let changeToFunction = NSLocalizedString(
+        "Change to function", bundle: .module, comment: "Change to function / 改为函数")
 }
