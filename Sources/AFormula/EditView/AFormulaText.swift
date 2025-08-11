@@ -1,3 +1,4 @@
+import AFunction
 import AValue
 import AViewUI
 
@@ -36,6 +37,6 @@ public struct AFormulaText: View {
 
 @available(iOS 15, *)
 #Preview {
-    AFormulaText(1 + 12 * .p(12 + 15))
+    AFormulaText(.example)
 }
 #endif

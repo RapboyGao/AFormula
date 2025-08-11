@@ -7,13 +7,14 @@ import SwiftUI
 public struct ATokenMenu: View {
     @Binding var token: AToken
     @Environment(\.aFormulaEditingHelper) private var editingHelper
+    @Environment(\.colorScheme) private var colorScheme
 
     var handleDelete: () -> Void
     var cursorToLeft: () -> Void
     var cursorToRight: () -> Void
 
-    private var tokenString: String? {
-        token.toString(rows: editingHelper.rowDict, functions: editingHelper.functionNameDict)
+    private var tokenString: AttributedString {
+        token.attributedString(colorScheme: colorScheme, rows: editingHelper.rowDict, functions: editingHelper.functionNameDict)
     }
 
     public var body: some View {
@@ -52,14 +53,10 @@ public struct ATokenMenu: View {
             }
 
         } label: {
-            if let tokenString = tokenString {
-                Text(tokenString)
-                    .foregroundStyle(token.colorForLightTheme())
-            } else if case let .value(value) = token.content {
+            if case let .value(value) = token.content {
                 AValueAsArgumentView(value: value, precision: .fractionLength(0 ... 20), unit: nil, name: "Value")
             } else {
-                Text(token.placeholder ?? "??")
-                    .foregroundStyle(.gray)
+                Text(tokenString)
             }
         }
     }

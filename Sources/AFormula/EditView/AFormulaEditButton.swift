@@ -35,7 +35,7 @@ public struct AFormulaEditButton: View {
 
 @available(iOS 16, *)
 private struct Example: View {
-    @State var formula = 1 + 3 * .p(25 + 15)
+    @State var formula: AFormula = .example
 
     var body: some View {
         AFormulaEditButton($formula)
@@ -44,7 +44,9 @@ private struct Example: View {
 
 @available(iOS 16, *)
 #Preview {
-    Example()
+    List {
+        Example()
+    }
 }
 
 #endif
