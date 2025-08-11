@@ -72,7 +72,7 @@ public struct ATokensEditView: View {
         }
         .toolbar {
             ToolbarItemGroup(placement: .topBarLeading) {
-                AValueToolbarMenu { value in
+                AValueToolbarItems { value in
                     status.insert(.value(value))
                 }
             }
