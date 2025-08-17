@@ -64,6 +64,18 @@ public struct AValueToolbarItems: View {
                         Label(valueType.name, systemImage: valueType.symbolName)
                     }
 
+                } else if valueType == .boolean {
+                    Menu {
+                        Button(AValue.boolean(true).description, systemImage: "checkmark") {
+                            action(.boolean(true))
+                        }
+                        Button(AValue.boolean(false).description, systemImage: "x.circle.fill") {
+                            action(.boolean(false))
+                        }
+                    } label: {
+                        Label(valueType.name, systemImage: valueType.symbolName)
+                    }
+
                 } else {
                     NavigationLink {
                         AValueToolbarFSContent(value: $value, action: action, valueType: valueType)
