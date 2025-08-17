@@ -9,16 +9,7 @@ private struct AValueToolbarFSContent: View {
     var action: (AValue) -> Void
     var valueType: AValueType
 
-    @State private var isColorPickerShown = true
     @Environment(\.dismiss) private var dismiss
-
-    private var bindColor: Binding<Color> {
-        Binding {
-            value?.getColor() ?? .white
-        } set: { newColor in
-            value = .init(color: newColor)
-        }
-    }
 
     private var buttonText: String {
         guard value != nil
@@ -31,50 +22,31 @@ private struct AValueToolbarFSContent: View {
     private func submitNewValue() {
         dismiss()
         guard let newValue = value
-        else {
-            return
-        }
+        else { return }
         action(newValue)
         value = nil
     }
 
-    private var bindColorPickerShown: Binding<Bool> {
-        Binding {
-            isColorPickerShown
-        } set: { newValue in
-            if !newValue {
-                DispatchQueue.main.async {
+    var body: some View {
+        AValueFSContent(value: $value, type: valueType, allowInput: true, name: I18n.newValue, unit: .constant(nil))
+            .statusBarHidden()
+            .navigationBarBackButtonHidden()
+            .toolbar {
+                Button(buttonText) {
                     submitNewValue()
                 }
             }
-        }
-    }
-
-    var body: some View {
-        if valueType == .color {
-            AEmbeddedColorPicker(color: bindColor, isPresented: $isColorPickerShown) {
-                ColorPicker(I18n.newValue, selection: bindColor)
-            }
-        } else {
-            AValueFSContent(value: $value, type: valueType, allowInput: true, name: I18n.newValue, unit: .constant(nil))
-                .statusBarHidden()
-                .navigationBarBackButtonHidden()
-                .toolbar {
-                    Button(buttonText) {
-                        submitNewValue()
-                    }
-                }
-        }
     }
 }
 
 @available(iOS 16, *)
 public struct AValueToolbarItems: View {
-    @State private var value: AValue?
-
     @Binding var keyboardFocused: Bool
 
     var action: (AValue) -> Void
+
+    @State private var value: AValue?
+    @State private var isColorPickerShown = false
 
     let types = AValueType.allCases.dropFirst()
 
@@ -84,16 +56,56 @@ public struct AValueToolbarItems: View {
         }
     }
 
+    private var bindColor: Binding<Color> {
+        Binding {
+            value?.getColor() ?? .white
+        } set: { newColor in
+            value = .init(color: newColor)
+        }
+    }
+
+    func submit() {
+        if let value {
+            action(value)
+        }
+        value = nil
+    }
+
+    func submit(value: AValue?) {
+        if let value {
+            action(value)
+        }
+        self.value = nil
+    }
+
+    func submit(_ someBool: Bool) {
+        action(.boolean(someBool))
+        value = nil
+    }
+
     public var body: some View {
         Menu {
             ForEach(types) { valueType in
-                if valueType == .boolean {
+                if valueType == .color {
+                    AEmbeddedColorPicker(color: bindColor, isPresented: $isColorPickerShown) {
+                        Button {
+                            isColorPickerShown = true
+                        } label: {
+                            Label(valueType.name, systemImage: valueType.symbolName)
+                        }
+                    }
+                    .onChange(of: isColorPickerShown) { newValue in
+                        if !newValue {
+                            submit()
+                        }
+                    }
+                } else if valueType == .boolean {
                     Menu {
                         Button(AValue.boolean(true).description, systemImage: "checkmark") {
-                            action(.boolean(true))
+                            submit(true)
                         }
                         Button(AValue.boolean(false).description, systemImage: "x.circle.fill") {
-                            action(.boolean(false))
+                            submit(false)
                         }
                     } label: {
                         Label(valueType.name, systemImage: valueType.symbolName)
@@ -106,7 +118,6 @@ public struct AValueToolbarItems: View {
                     }
                 }
             }
-
         } label: {
             Label(I18n.insert, systemImage: "plus")
         }
