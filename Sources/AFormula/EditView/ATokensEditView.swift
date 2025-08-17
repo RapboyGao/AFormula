@@ -48,9 +48,8 @@ public struct ATokensEditView: View {
                         AInputCursorNonAlternating(height: 30)
                     }
                     ACustomUITextField(editingStatus: bindTextfield) { _ in
-                        ATokensIPhoneKeyboard(status: $status)
+                        ATokensKeyboard(status: $status)
                             .environment(\.aFormulaEditingHelper, helper)
-                            .frame(height: 350)
                     } makeTextfield: {
                         let textfield = UITextField()
                         textfield.frame = CGRect(origin: CGPoint(x: 0, y: 10), size: CGSize(width: 3, height: 30))
@@ -99,8 +98,7 @@ private struct ATokenEditPreview: View {
             VStack {
                 ATokensEditView(status: $status)
                 Spacer()
-                ATokensIPhoneKeyboard(status: $status)
-                    .frame(height: 350)
+                ATokensKeyboard(status: $status)
             }
         }
     }
