@@ -63,8 +63,8 @@ public struct AValueToolbarItems: View {
                         isColorPickerShown = true
                     } label: {
                         Label(valueType.name, systemImage: valueType.symbolName)
-                        AEmbeddedColorPicker(color: bindColor, isPresented: $isColorPickerShown)
                     }
+
                 } else {
                     NavigationLink {
                         AValueToolbarFSContent(value: $value, action: action, valueType: valueType)
@@ -73,6 +73,7 @@ public struct AValueToolbarItems: View {
                     }
                 }
             }
+            AEmbeddedColorPicker(color: bindColor, isPresented: $isColorPickerShown)
         }
         .onChange(of: isColorPickerShown) { newValue in
             if newValue == false, let value = value {

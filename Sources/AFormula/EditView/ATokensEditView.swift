@@ -7,7 +7,6 @@ import SwiftUI
 @available(iOS 16, *)
 public struct ATokensEditView: View {
     @Binding var status: ATokenEditStatus
-    @State private var focused: Bool = true
     @State private var dragPosition = CGPoint()
 
     @Environment(\.colorScheme) private var colorScheme
@@ -15,7 +14,15 @@ public struct ATokensEditView: View {
 
     private var tapFocus: some Gesture {
         TapGesture().onEnded { _ in
-            focused = true
+            status.isFocused = true
+        }
+    }
+
+    private var bindTextfield: Binding<ACustomKeyboardEditingStatus> {
+        Binding {
+            .init("", focused: status.isFocused)
+        } set: { newValue in
+            status.isFocused = newValue.focused
         }
     }
 
@@ -40,7 +47,7 @@ public struct ATokensEditView: View {
                     if status.isDraggingCursor {
                         AInputCursorNonAlternating(height: 30)
                     }
-                    ACustomUITextField(text: .constant(""), startIndex: .constant(.init(utf16Offset: 0, in: "")), endIndex: .constant(.init(utf16Offset: 0, in: "")), focused: $focused) { _ in
+                    ACustomUITextField(editingStatus: bindTextfield) { _ in
                         ATokensIPhoneKeyboard(status: $status)
                             .environment(\.aFormulaEditingHelper, helper)
                             .frame(height: 350)
@@ -64,15 +71,6 @@ public struct ATokensEditView: View {
                     status.setCursor(toAfter: bindToken.wrappedValue)
                 }
             }
-        }
-        .onChange(of: status.isDraggingCursor) { _ in
-            focused = true
-        }
-        .onChange(of: focused) { _ in
-            focused = true
-        }
-        .onAppear {
-            focused = true
         }
         .toolbar {
             ToolbarItemGroup(placement: .topBarLeading) {

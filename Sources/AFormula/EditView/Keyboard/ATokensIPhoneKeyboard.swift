@@ -191,3 +191,22 @@ public struct ATokensIPhoneKeyboard: View {
 }
 
 #endif
+
+#if os(iOS) && DEBUG
+
+@available(iOS 16, *)
+private struct Example: View {
+    @State private var status = ATokenEditStatus(formula: 1 + 2)
+
+    public var body: some View {
+        ATokensIPhoneKeyboard(status: $status)
+            .frame(height: 300) // 为iPhone键盘设置合适的预览高度
+    }
+}
+
+@available(iOS 16, *)
+#Preview {
+    Example()
+}
+
+#endif

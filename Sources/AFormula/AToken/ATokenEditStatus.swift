@@ -11,6 +11,8 @@ public struct ATokenEditStatus: Hashable, Sendable, Codable {
     /// 是否正在拖动光标
     public var isDraggingCursor = false
 
+    public var isFocused = true
+
     var canInsertNumber: Bool {
         return tokensBeforeCursor.last?.content.canBeFollowedByLiteral() ?? tokensAfterCursor.first?
             .content.canBePrefixedByLiteral() ?? true

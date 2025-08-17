@@ -20,7 +20,8 @@ public struct AFormulaEditButton: View {
             AFormulaText(formula, helper: helper)
         } cover: {
             ATokensEditView(status: $status)
-        } onSheetClosed: {
+        } beforeSheetClose: {
+            status.isFocused = false
             if let newFormula {
                 self.formula = newFormula
             }
