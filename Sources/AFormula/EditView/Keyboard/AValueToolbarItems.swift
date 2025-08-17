@@ -63,7 +63,7 @@ public struct AValueToolbarItems: View {
     }
 
     public var body: some View {
-        Menu(I18n.insert, systemImage: "plus") {
+        Menu {
             ForEach(types) { valueType in
                 if valueType == .color {
                     Button {
@@ -71,7 +71,9 @@ public struct AValueToolbarItems: View {
                     } label: {
                         Label(valueType.name, systemImage: valueType.symbolName)
                     }
-
+                    .onAppear {
+                        keyboardFocused = false
+                    }
                 } else if valueType == .boolean {
                     Menu {
                         Button(AValue.boolean(true).description, systemImage: "checkmark") {
@@ -83,7 +85,6 @@ public struct AValueToolbarItems: View {
                     } label: {
                         Label(valueType.name, systemImage: valueType.symbolName)
                     }
-
                 } else {
                     NavigationLink {
                         AValueToolbarFSContent(value: $value, action: action, valueType: valueType)
@@ -93,8 +94,9 @@ public struct AValueToolbarItems: View {
                 }
             }
             AEmbeddedColorPicker(color: bindColor, isPresented: $isColorPickerShown)
+        } label: {
+            Label(I18n.insert, systemImage: "plus")
         }
-        .simultaneousGesture(onTapCancelFocus)
         .onChange(of: isColorPickerShown) { newValue in
             if newValue == false, let value = value {
                 action(value)
