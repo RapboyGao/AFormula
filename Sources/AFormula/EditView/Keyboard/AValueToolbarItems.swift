@@ -40,7 +40,6 @@ private struct AValueToolbarFSContent: View {
 @available(iOS 16, *)
 public struct AValueToolbarItems: View {
     @State private var value: AValue?
-
     @State private var isColorPickerShown = false
 
     var action: (AValue) -> Void

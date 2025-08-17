@@ -77,6 +77,7 @@ public struct ATokensEditView: View {
                 AValueToolbarItems { value in
                     status.insert(.value(value))
                 }
+                
             }
         }
         .padding()
