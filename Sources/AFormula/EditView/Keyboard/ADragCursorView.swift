@@ -81,7 +81,7 @@ import CoreHaptics
                 }
                 .frame(maxHeight: .infinity) // 让VStack占满GeometryReader的高度
                 .simultaneousGesture(dragGesture)
-                .animation(.easeInOut(duration: 0.2), value: status.isDraggingCursor)
+//                .animation(.easeInOut(duration: 0.2), value: status.isDraggingCursor)
             }
             .frame(height: 30)
         }
