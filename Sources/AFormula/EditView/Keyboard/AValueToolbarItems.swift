@@ -42,6 +42,8 @@ public struct AValueToolbarItems: View {
     @State private var value: AValue?
     @State private var isColorPickerShown = false
 
+    @Binding var keyboardFocused: Bool
+
     var action: (AValue) -> Void
 
     let types = AValueType.allCases.dropFirst()
@@ -51,6 +53,12 @@ public struct AValueToolbarItems: View {
             value?.getColor() ?? .white
         } set: { newColor in
             value = .init(color: newColor)
+        }
+    }
+
+    private var onTapCancelFocus: some Gesture {
+        TapGesture().onEnded { _ in
+            keyboardFocused = false
         }
     }
 
@@ -86,6 +94,7 @@ public struct AValueToolbarItems: View {
             }
             AEmbeddedColorPicker(color: bindColor, isPresented: $isColorPickerShown)
         }
+        .simultaneousGesture(onTapCancelFocus)
         .onChange(of: isColorPickerShown) { newValue in
             if newValue == false, let value = value {
                 action(value)
@@ -93,7 +102,8 @@ public struct AValueToolbarItems: View {
         }
     }
 
-    public init(action: @escaping (AValue) -> Void) {
+    public init(keyboard keyboardFocused: Binding<Bool>, action: @escaping (AValue) -> Void) {
+        self._keyboardFocused = keyboardFocused
         self.action = action
     }
 }
@@ -101,7 +111,7 @@ public struct AValueToolbarItems: View {
 @available(iOS 16, *)
 #Preview {
     NavigationStack {
-        AValueToolbarItems { value in
+        AValueToolbarItems(keyboard: .constant(true)) { value in
             print(value)
         }
     }

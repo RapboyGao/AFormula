@@ -73,10 +73,9 @@ public struct ATokensEditView: View {
         }
         .toolbar {
             ToolbarItemGroup(placement: .topBarLeading) {
-                AValueToolbarItems { value in
+                AValueToolbarItems(keyboard: $status.isFocused) { value in
                     status.insert(.value(value))
                 }
-                
             }
         }
         .padding()
