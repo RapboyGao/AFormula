@@ -3,58 +3,6 @@ import AViewUI
 
 #if os(iOS)
 
-// 自定义颜色选择器，支持监听显示状态
-@available(iOS 16, *)
-private struct ObservableColorPicker: UIViewRepresentable {
-    @Binding var color: Color
-    @Binding var isPresented: Bool // 用于跟踪是否打开的状态
-
-    func makeUIView(context: Context) -> UIView {
-        let view = UIView()
-        return view
-    }
-
-    func updateUIView(_ uiView: UIView, context: Context) {
-        // 检查是否需要显示颜色选择器
-        if isPresented && context.coordinator.picker == nil {
-            let picker = UIColorPickerViewController()
-            picker.selectedColor = UIColor(color)
-            picker.delegate = context.coordinator
-            context.coordinator.picker = picker
-
-            // 获取当前的UIViewController并 present 选择器
-            if let rootVC = UIApplication.shared.windows.first?.rootViewController {
-                rootVC.present(picker, animated: true)
-            }
-        }
-    }
-
-    func makeCoordinator() -> Coordinator {
-        Coordinator(self)
-    }
-
-    class Coordinator: NSObject, UIColorPickerViewControllerDelegate {
-        var parent: ObservableColorPicker
-        var picker: UIColorPickerViewController?
-
-        init(_ parent: ObservableColorPicker) {
-            self.parent = parent
-        }
-
-        // 颜色选择变化时调用
-        func colorPickerViewController(_ viewController: UIColorPickerViewController, didSelect color: UIColor, continuously: Bool) {
-            parent.color = Color(color)
-        }
-
-        // 选择器即将显示时调用
-        func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
-            // 选择器关闭时更新状态
-            parent.isPresented = false
-            picker = nil
-        }
-    }
-}
-
 @available(iOS 16, *)
 private struct AValueToolbarFSContent: View {
     @Binding var value: AValue?
@@ -115,7 +63,7 @@ public struct AValueToolbarItems: View {
                         isColorPickerShown = true
                     } label: {
                         Label(valueType.name, systemImage: valueType.symbolName)
-                        ObservableColorPicker(color: bindColor, isPresented: $isColorPickerShown)
+                        AEmbeddedColorPicker(color: bindColor, isPresented: $isColorPickerShown)
                     }
                 } else {
                     NavigationLink {

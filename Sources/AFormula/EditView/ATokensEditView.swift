@@ -1,12 +1,13 @@
 import AValue
 import AViewUI
+import SwiftUI
 
 #if os(iOS)
 
 @available(iOS 16, *)
 public struct ATokensEditView: View {
     @Binding var status: ATokenEditStatus
-    @FocusState private var focused: Bool
+    @State private var focused: Bool = true
     @State private var dragPosition = CGPoint()
 
     @Environment(\.colorScheme) private var colorScheme
@@ -37,16 +38,19 @@ public struct ATokensEditView: View {
             Group {
                 ZStack {
                     if status.isDraggingCursor {
-                        AInputCursorNonAlternating()
+                        AInputCursorNonAlternating(height: 30)
                     }
-                    TextField("", text: .constant(""))
-                        .aKeyboardView { _ in
-                            ATokensIPhoneKeyboard(status: $status)
-                                .environment(\.aFormulaEditingHelper, helper)
-                                .frame(height: 350)
-                        }
-                        .focused($focused)
-                        .opacity(status.isDraggingCursor ? 0 : 1)
+                    ACustomUITextField(text: .constant(""), startIndex: .constant(.init(utf16Offset: 0, in: "")), endIndex: .constant(.init(utf16Offset: 0, in: "")), focused: $focused) { _ in
+                        ATokensIPhoneKeyboard(status: $status)
+                            .environment(\.aFormulaEditingHelper, helper)
+                            .frame(height: 350)
+                    } makeTextfield: {
+                        let textfield = UITextField()
+                        textfield.frame = CGRect(origin: CGPoint(x: 0, y: 10), size: CGSize(width: 3, height: 30))
+                        return textfield
+                    }
+                    .opacity(status.isDraggingCursor ? 0 : 1)
+                    .offset(y: 4.5)
                 }
             }
             .frame(width: 3)

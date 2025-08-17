@@ -37,24 +37,18 @@ public struct ATokenMenu: View {
                 } label: {
                     Label(I18n.changeToVariable, systemImage: "list.bullet.indent")
                 }
-                //            Menu {
-                //                ForEach(editingHelper.functionGroups) { funcGroup in
-                //                    Menu(funcGroup.id.shortName, systemImage: funcGroup.id.systemImage) {
-                //                        ForEach(funcGroup.functions) { someFunction in
-                //                            Button(someFunction.description) {
-                //                                //
-                //                            }
-                //                        }
-                //                    }
-                //                }
-                //            } label: {
-                //                Label(I18n.changeToVariable, systemImage: "list.bullet.indent")
-                //            }
             }
 
         } label: {
             if case let .value(value) = token.content {
                 AValueAsArgumentView(value: value, precision: .fractionLength(0 ... 20), unit: nil, name: "Value")
+            } else if case let .row(id) = token.content, let row = editingHelper.rowDict[id] {
+                Text(row)
+                    .padding([.leading, .trailing], 3)
+                    .background {
+                        RoundedRectangle(cornerRadius: 3)
+                            .fill(.regularMaterial)
+                    }
             } else {
                 Text(tokenString)
             }

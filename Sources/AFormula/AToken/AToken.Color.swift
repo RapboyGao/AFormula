@@ -75,7 +75,7 @@ public extension AToken {
         functions functionNamesDict: [Int: String]
     ) -> AttributedString {
         if case .row(let id) = content, let string = rowNamesDict[id] {
-            var attributedString = AttributedString(string)
+            var attributedString = AttributedString(" " + string + " ")
             attributedString.foregroundColor = .white
             attributedString.backgroundColor = color(for: colorScheme)
             return attributedString
@@ -86,6 +86,8 @@ public extension AToken {
         } else {
             var attributedString = AttributedString("??")
             attributedString.foregroundColor = .gray
+            attributedString.strikethroughStyle = .single
+            attributedString.strikethroughColor = .gray
             return attributedString
         }
     }
