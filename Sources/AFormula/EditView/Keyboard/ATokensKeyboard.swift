@@ -11,18 +11,18 @@ public struct ATokensKeyboard: View {
     @Environment(\.aFormulaEditingHelper) private var helper
     
     // 检测当前设备是否为iPad
-    private var isiPad: Bool {
+    private var isPad: Bool {
         UIDevice.current.userInterfaceIdiom == .pad
     }
     
     // 根据设备类型选择合适的键盘高度
     private var keyboardHeight: CGFloat {
-        isiPad ? 380 : 350
+        isPad ? 380 : 350
     }
     
     public var body: some View {
         Group {
-            if isiPad {
+            if isPad {
                 ATokensIPadKeyboard(status: $status)
                     .environment(\.aFormulaEditingHelper, helper)
             } else {
