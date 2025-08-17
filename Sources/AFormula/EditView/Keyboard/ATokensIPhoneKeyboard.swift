@@ -173,17 +173,15 @@ public struct ATokensIPhoneKeyboard: View {
     }
 
     public var body: some View {
-        VStack {
-            AKeyboardBackgroundView { _ in
-                VStack {
-                    Spacer()
-                    ADragCursorView(status: $status)
-                        .padding([.leading, .trailing], 10)
-                    if usingSymbolKeyboard {
-                        symbolsKeyboard
-                    } else {
-                        numericKeyboard
-                    }
+        AKeyboardBackgroundView { _ in
+            VStack {
+                Spacer()
+                ADragCursorView(status: $status)
+                    .padding([.leading, .trailing], 10)
+                if usingSymbolKeyboard {
+                    symbolsKeyboard
+                } else {
+                    numericKeyboard
                 }
             }
         }

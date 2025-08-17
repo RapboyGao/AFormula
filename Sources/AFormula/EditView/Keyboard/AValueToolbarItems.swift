@@ -9,7 +9,16 @@ private struct AValueToolbarFSContent: View {
     var action: (AValue) -> Void
     var valueType: AValueType
 
+    @State private var isColorPickerShown = true
     @Environment(\.dismiss) private var dismiss
+
+    private var bindColor: Binding<Color> {
+        Binding {
+            value?.getColor() ?? .white
+        } set: { newColor in
+            value = .init(color: newColor)
+        }
+    }
 
     private var buttonText: String {
         guard value != nil
@@ -19,42 +28,55 @@ private struct AValueToolbarFSContent: View {
         return I18n.done
     }
 
-    var body: some View {
-        AValueFSContent(value: $value, type: valueType, allowInput: true, name: I18n.newValue, unit: .constant(nil))
-            .statusBarHidden()
-            .navigationBarBackButtonHidden()
-            .toolbar {
-                Button(buttonText) {
-                    dismiss()
-                    guard let newValue = value
-                    else {
-                        return
-                    }
-                    action(newValue)
-                    self.value = nil
+    private func submitNewValue() {
+        dismiss()
+        guard let newValue = value
+        else {
+            return
+        }
+        action(newValue)
+        value = nil
+    }
+
+    private var bindColorPickerShown: Binding<Bool> {
+        Binding {
+            isColorPickerShown
+        } set: { newValue in
+            if !newValue {
+                DispatchQueue.main.async {
+                    submitNewValue()
                 }
             }
+        }
+    }
+
+    var body: some View {
+        if valueType == .color {
+            AEmbeddedColorPicker(color: bindColor, isPresented: $isColorPickerShown) {
+                ColorPicker(I18n.newValue, selection: bindColor)
+            }
+        } else {
+            AValueFSContent(value: $value, type: valueType, allowInput: true, name: I18n.newValue, unit: .constant(nil))
+                .statusBarHidden()
+                .navigationBarBackButtonHidden()
+                .toolbar {
+                    Button(buttonText) {
+                        submitNewValue()
+                    }
+                }
+        }
     }
 }
 
 @available(iOS 16, *)
 public struct AValueToolbarItems: View {
     @State private var value: AValue?
-    @State private var isColorPickerShown = false
 
     @Binding var keyboardFocused: Bool
 
     var action: (AValue) -> Void
 
     let types = AValueType.allCases.dropFirst()
-
-    private var bindColor: Binding<Color> {
-        Binding {
-            value?.getColor() ?? .white
-        } set: { newColor in
-            value = .init(color: newColor)
-        }
-    }
 
     private var onTapCancelFocus: some Gesture {
         TapGesture().onEnded { _ in
@@ -65,16 +87,7 @@ public struct AValueToolbarItems: View {
     public var body: some View {
         Menu {
             ForEach(types) { valueType in
-                if valueType == .color {
-                    Button {
-                        isColorPickerShown = true
-                    } label: {
-                        Label(valueType.name, systemImage: valueType.symbolName)
-                    }
-                    .onAppear {
-                        keyboardFocused = false
-                    }
-                } else if valueType == .boolean {
+                if valueType == .boolean {
                     Menu {
                         Button(AValue.boolean(true).description, systemImage: "checkmark") {
                             action(.boolean(true))
@@ -93,14 +106,9 @@ public struct AValueToolbarItems: View {
                     }
                 }
             }
-            AEmbeddedColorPicker(color: bindColor, isPresented: $isColorPickerShown)
+
         } label: {
             Label(I18n.insert, systemImage: "plus")
-        }
-        .onChange(of: isColorPickerShown) { newValue in
-            if newValue == false, let value = value {
-                action(value)
-            }
         }
     }
 
