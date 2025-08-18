@@ -86,20 +86,7 @@ public struct AValueToolbarItems: View {
     public var body: some View {
         Menu {
             ForEach(types) { valueType in
-                if valueType == .color {
-                    AEmbeddedColorPicker(color: bindColor, isPresented: $isColorPickerShown) {
-                        Button {
-                            isColorPickerShown = true
-                        } label: {
-                            Label(valueType.name, systemImage: valueType.symbolName)
-                        }
-                    }
-                    .onChange(of: isColorPickerShown) { newValue in
-                        if !newValue {
-                            submit()
-                        }
-                    }
-                } else if valueType == .boolean {
+                if valueType == .boolean {
                     Menu {
                         Button(AValue.boolean(true).description, systemImage: "checkmark") {
                             submit(true)
